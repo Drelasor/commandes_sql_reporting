@@ -2,7 +2,7 @@ select distinct
 
 fr.DESCRIPTION as FR_DESCRIPTION,fr.CREATED_BY as FR_CREATED_BY,fr.CREATED_ON as FR_CREATED_ON,
 
-sp.DESCRIPTION as SP_DESCRIPTION, spchild.DESCRIPTION as SP_CHILD_DESCRIPTION,
+sp.SP, sp.DESCRIPTION as SP_DESCRIPTION, sp.SP_VALUE,spchild.SP as spchild_sp, spchild.DESCRIPTION as SP_CHILD_DESCRIPTION, spchild.SP_VALUE as SP_CHILD_VALUE,
 
 spic.IC, spic.IC_SHORT_DESC, spicchild.IC as SPIC_CHILD_IC, spicchild.IC_SHORT_DESC as SPIC_CHILD_IC_SHORT_DESC,
 
@@ -21,8 +21,6 @@ join RndSuite.RndtSpIi as spii on spii.IC = spic.IC
 join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
 
 
-
-
-where fr.DESCRIPTION like 'ES%' and sp.SP = 173
+where fr.DESCRIPTION like 'ES%' and sp.SP = 97 and spii.IIVALUE is not null and spiichild.IIVALUE is not null and spii.DSP_TITLE is not null and spiichild.DSP_TITLE is not null
 
 
