@@ -1,28 +1,28 @@
-select
-fr.FR as FR_FR,fr.FR_VERSION,fr.DESCRIPTION as FR_DESCRIPTION,fr.CREATED_BY as FR_CREATED_BY,fr.CREATED_ON as FR_CREATED_ON,
+select distinct 
 
-sp.SP, sp.SP_VERSION, sp.FR, sp.FR_VERSION,
+fr.DESCRIPTION as FR_DESCRIPTION,fr.CREATED_BY as FR_CREATED_BY,fr.CREATED_ON as FR_CREATED_ON,
 
-spchild.SP as SP_CHILD_SP,  spchild.SP_VERSION as SP_CHILD_SP_VERSION,
+sp.DESCRIPTION as SP_DESCRIPTION, spchild.DESCRIPTION as SP_CHILD_DESCRIPTION,
 
-spsp.SP as SPSP_SP,spsp.SP_VERSION as SPSP_SP_VERSION,spsp.CHILD_SP as SPSP_CHILD_SP, spsp.CHILD_SP_VERSION as SPSP_CHILD_SP_VERSION,
+spic.IC, spic.IC_SHORT_DESC, spicchild.IC as SPIC_CHILD_IC, spicchild.IC_SHORT_DESC as SPIC_CHILD_IC_SHORT_DESC,
 
-ic.SP as IC_SP, ic.SP_VERSION as IC_SP_VERSION,
+spii.II ,spii.II_SHORT_DESC ,spii.DSP_TITLE , spii.IIVALUE,
 
-icspchild.SP as IC_SP_CHILD , icspchild.SP_VERSION as IC_SP_CHILD_VERSION,
-
-ii.II , ii.II_SHORT_DESC ,ii.DSP_TITLE , ii.IIVALUE,
-
-iichild.II as IICHILD_II, iichild.II_SHORT_DESC as IICHILD_II_SHORT_DESC, iichild.DSP_TITLE as IICHILD_II_DSP_TITLE, iichild.IIVALUE as IICHILD_IVALUE
-
+spiichild.II as SPII_CHILD_II, spiichild.II_SHORT_DESC as SPII_CHILD_II_SHORT_DESC, spiichild.DSP_TITLE as SPII_CHILD_DSP_TITLE, spiichild.IIVALUE  as SPII_CHILD_IIVALUE
 
 
 from RndSuite.RndtFr as fr
-join RndSuite.RndtSp as sp on sp.FR = fr.FR and sp.FR_VERSION = fr.FR_VERSION
-join RndSuite.RndtSpSp as spsp  on spsp.SP = sp.SP and spsp.SP_VERSION = sp.SP_VERSION
-join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP and spchild.SP_VERSION = sp.SP_VERSION
-join RndSuite.RndtSpIc as ic on ic.SP = sp.SP and  ic.SP_VERSION = sp.SP_VERSION
-join RndSuite.RndtSpIc as icspchild on icspchild.SP = spchild.SP and icspchild.SP_VERSION = spchild.SP_VERSION
-join RndSuite.RndtSpIi as ii on ii.IC = ic.IC 
-join RndSuite.RndtSpIi as iichild on iichild.IC = icspchild.IC 
+join RndSuite.RndtSp as sp on sp.FR = fr.FR and sp.FR_VERSION = fr.FR_VERSION -- relation de la trame au sp parent
+join RndSuite.RndtSpSp as spsp  on spsp.SP = sp.SP and spsp.SP_VERSION = sp.SP_VERSION --  table relationnel parent enfant 
+join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
+join RndSuite.RndtSpIc as spic on spic.SP = sp.SP and  spic.SP_VERSION = sp.SP_VERSION
+join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
+join RndSuite.RndtSpIi as spii on spii.IC = spic.IC
+join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
+
+
+
+
 where fr.DESCRIPTION like 'ES%' and sp.SP = 173
+
+
