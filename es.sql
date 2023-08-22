@@ -18,8 +18,6 @@ from RndSuite.RndtSpSp as spsp
  left join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
  left join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
 
-
---where fr.DESCRIPTION like 'ES%' and sp.SP = 84
 where sp.SP = @p_sp
 
 
@@ -43,5 +41,4 @@ from RndSuite.RndtFr as fr
  join RndSuite.RndtSpIc as spic on spic.SP = sp.SP and  spic.SP_VERSION = sp.SP_VERSION
  join RndSuite.RndtSpIi as spii on spii.IC = spic.IC
 
-
-where sp.SP = 110
+where sp.SP = @p_sp
