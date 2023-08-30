@@ -1,4 +1,4 @@
-select 
+select*
 fr.FR_VALUE, item.SP, item.COMPONENT_SP,frcomp.FR_VALUE
 from RndSuite.RndtFr as fr
  join RndSuite.RndtSp as sp on sp.FR = fr.FR and sp.FR_VERSION = fr.FR_VERSION
