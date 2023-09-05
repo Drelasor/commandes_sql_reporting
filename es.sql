@@ -1,4 +1,4 @@
-ES enfant
+ES spécifique
 
 select distinct 
 
@@ -13,17 +13,17 @@ spiichild.II as SPII_CHILD, spiichild.II_SHORT_DESC as SPII_CHILD_SHORT_DESC, sp
 
 
 from RndSuite.RndtSpSp as spsp
- left join RndSuite.RndtSp as sp on sp.SP = spsp.SP
- left join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
- left join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
- left join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
+ join RndSuite.RndtSp as sp on sp.SP = spsp.SP
+ join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
+ join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
+ join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
 
 where sp.SP = @p_sp
 
 
 
 --------------------------------
-ES parent
+ES générique
 
 select distinct 
 
