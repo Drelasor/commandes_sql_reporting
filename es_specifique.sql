@@ -1,11 +1,9 @@
 // spécifique
 select distinct
 spicchild.SP_VALUE, spicchild.IC_SHORT_DESC,spiichild.DSP_TITLE ,spiichild.IIVALUE
-
-
-from  RndSuite.RndtSpSp as spsp
+ 
+ from  RndSuite.RndtSpSp as spsp
  join RndSuite.RndtSpIc as spicchild on spicchild.SP = spsp.CHILD_SP
- join RndSuite.RndtSpIc as spic on spic.SP = spsp.SP
  join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC and spiichild.SP = spicchild.SP
 
 
