@@ -13,12 +13,12 @@ spiichild.II as SPII_CHILD, spiichild.II_SHORT_DESC as SPII_CHILD_SHORT_DESC, sp
 
 
 from RndSuite.RndtSpSp as spsp
- join RndSuite.RndtSp as sp on sp.SP = spsp.SP
- join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
- join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
- join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC
+ left join RndSuite.RndtSp as sp on sp.SP = spsp.SP
+ left join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
+ left join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
+ left join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC and spiichild.SP = spicchild.SP
 
-where sp.SP = @p_sp
+where sp.SP_VALUE = @p_material_number
 
 
 
@@ -39,6 +39,7 @@ spii.II as SPII ,spii.II_SHORT_DESC as SPII_SHORT_DESC, spii.DSP_TITLE as SPII_D
 from RndSuite.RndtFr as fr
  join RndSuite.RndtSp as sp on sp.FR = fr.FR and sp.FR_VERSION = fr.FR_VERSION 
  join RndSuite.RndtSpIc as spic on spic.SP = sp.SP and  spic.SP_VERSION = sp.SP_VERSION
- join RndSuite.RndtSpIi as spii on spii.IC = spic.IC
+ join RndSuite.RndtSpIi as spii on spii.IC = spic.IC and spii.SP = spic.SP
 
-where sp.SP = @p_sp
+
+where sp.SP_VALUE = @p_material_number
