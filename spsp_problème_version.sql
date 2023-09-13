@@ -7,7 +7,6 @@ else RqToFm.SP_VERSION end) and FmSp.FR in (select FR from RndSuite.RndtFr where
 select *
 
 --avec sp
-
 from RndSuite.RndtSpSp as spsp  
 join RndSuite.RndtSp as sp on sp.SP = spsp.SP
 and sp.SP_VERSION in ( 
@@ -18,12 +17,10 @@ else spsp.SP_VERSION end)
 
 
 -- avec sp_child
-
-
 from RndSuite.RndtSpSp as spsp  
 join RndSuite.RndtSp as sp on sp.SP = spsp.CHILD_SP 
 and sp.SP_VERSION in (
-    select CASE spsp.SP_VERSION when -1 then 
+    select CASE spsp.CHILD_SP_VERSION when -1 then 
         (select TOP 1 first_value(x.SP_VERSION)
         over(order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = sp.SP)
     else spsp.SP_VERSION end) 
@@ -41,3 +38,4 @@ Cela permet d'effectuer des calculs cumulatifs ou de calculer des valeurs basée
 top = filtrer le nombre de lignes 
 
 first_value = prend la première valeur de la colonne
+
