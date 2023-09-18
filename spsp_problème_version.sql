@@ -4,26 +4,28 @@ and FmSp.SP_VERSION in ( select CASE RqToFm.SP_VERSION when -1 then (select TOP 
 over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = FmSp.SP) 
 else RqToFm.SP_VERSION end) and FmSp.FR in (select FR from RndSuite.RndtFr where FR_VALUE = 'FM')
 
-select *
 
 --avec sp
+select *
+
 from RndSuite.RndtSpSp as spsp  
 join RndSuite.RndtSp as sp on sp.SP = spsp.SP
 and sp.SP_VERSION in ( 
     select CASE spsp.SP_VERSION when -1 then 
-    (select TOP 1 first_value(x.SP_VERSION) over(order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = sp.SP)
+        (select TOP 1 first_value(x.SP_VERSION) 
+        over(order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = sp.SP)
 else spsp.SP_VERSION end) 
 
-
-
 -- avec sp_child
+select *
+
 from RndSuite.RndtSpSp as spsp  
 join RndSuite.RndtSp as sp on sp.SP = spsp.CHILD_SP 
 and sp.SP_VERSION in (
     select CASE spsp.CHILD_SP_VERSION when -1 then 
         (select TOP 1 first_value(x.SP_VERSION)
         over(order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = sp.SP)
-    else spsp.SP_VERSION end) 
+else spsp.SP_VERSION end) 
 
 
 /*

@@ -14,9 +14,9 @@ spiichild.II as SPII_CHILD, spiichild.II_SHORT_DESC as SPII_CHILD_SHORT_DESC, sp
 
 from RndSuite.RndtSpSp as spsp
  left join RndSuite.RndtSp as sp on sp.SP = spsp.SP
- left join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- Récuperation des spe enfants
+ left join RndSuite.RndtSp as spchild on spchild.SP = spsp.CHILD_SP -- ajouter script
  left join RndSuite.RndtSpIc as spicchild on spicchild.SP = spchild.SP and spicchild.SP_VERSION = spchild.SP_VERSION
- left join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC and spiichild.SP = spicchild.SP
+ left join RndSuite.RndtSpIi as spiichild on spiichild.IC = spicchild.IC and spiichild.SP = spicchild.SP and spiichild.ICNODE = spicchild.ICNODE 
 
 where sp.SP_VALUE = @p_material_number
 

@@ -162,7 +162,7 @@ DELETE FROM [RndSuite].[RndtRpCmdArg] where RP IS NOT NULL
 -- VALUES (CAST(2 AS Numeric(12, 0)), CAST(1.0000 AS Numeric(12, 4)), N'p_VERSION', N'D', N'Specification.SpecificationVersion[]', NULL)
 
 -- ALLWAYS ADD THE RENDER COMMAND TO EACH REPORT !!
-
+-- rp = 
 INSERT [RndSuite].[RndtRpCmdArg] ([RP], [VERSION], [ARGUMENT], [VALUE_TP], [VALUE], [CF])
 select a.RP, CAST(1.0000 AS Numeric(12, 4)), N'rs:Command', N'S', N'Render', NULL
   from #TempRep a
