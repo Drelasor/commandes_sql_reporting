@@ -79,3 +79,5 @@ spii.SP, spii.SP_VERSION,
   left outer join RndSuite.RndvRepDc f on ltrim(rtrim(spii.SPECINFOFIELDVALUE)) = FORMAT(f.DC,'0')+'#'+FORMAT(f.VERSION,'0')
 
 where sp.UNIQUE_ID = @p_UniqueID
+
+
