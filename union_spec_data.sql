@@ -2,7 +2,7 @@ EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
 
 select 
 DISTINCT 
-spii.SP, spii.SP_VERSION,
+fr.FR_VALUE, spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC , spic.DSP_TITLE as IC_DSP_TITLE,
           spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, 
                    spii.POS_X, spii.POS_Y,
@@ -50,6 +50,7 @@ spii.SP, spii.SP_VERSION,
           f.DESCRIPTION as ATTACH_DESC,
           f.TOOLTIP as ATTACH_MIME
   from RndSuite.RndvRepSpIi spii inner join RndSuite.RndvSp spP on spii.SP= spP.SP and spii.SP_VERSION = spP.SP_VERSION
+  left outer join RndSuite.RndvFr fr on spP.FR = fr.FR and spP.FR_VERSION = fr.FR_VERSION
   left outer join RndSuite.RndvSpSp spsp on spP.SP = spsp.SP and spP.SP_VERSION = spsp.SP_VERSION 
   left outer join RndSuite.RndvSp spC  on spC.SP = spsp.CHILD_SP and spC.SP_VERSION in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = spC.SP) else spsp.CHILD_SP_VERSION end)
   left outer join RndSuite.RndvRepSpIc spic on spii.SP = spic.SP and spii.SP_VERSION = spic.SP_VERSION and spii.ICNODE = spic.ICNODE
@@ -71,13 +72,13 @@ spii.SP, spii.SP_VERSION,
   where COL_HIDDEN <> 1) e on spiily.LY = e.LY and spiily.LY_VERSION = e.LY_VERSION
   left outer join RndSuite.RndvRepDc f on ltrim(rtrim(spii.SPECINFOFIELDVALUE)) = FORMAT(f.DC,'0')+'#'+FORMAT(f.VERSION,'0')
 
-where spC.UNIQUE_ID = @p_UniqueID
+where spC.UNIQUE_ID = @p_UniqueID 
 
 union all
 
 select 
 DISTINCT 
-spii.SP, spii.SP_VERSION,
+fr.FR_VALUE, spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC , spic.DSP_TITLE as IC_DSP_TITLE,
           spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, 
                    spii.POS_X, spii.POS_Y,
@@ -125,6 +126,7 @@ spii.SP, spii.SP_VERSION,
           f.DESCRIPTION as ATTACH_DESC,
           f.TOOLTIP as ATTACH_MIME
   from RndSuite.RndvRepSpIi spii inner join RndSuite.RndvSp spC on spii.SP= spC.SP and spii.SP_VERSION = spC.SP_VERSION
+  left outer join RndSuite.RndvFr fr on spC.FR = fr.FR and spC.FR_VERSION = fr.FR_VERSION
   left outer join RndSuite.RndvSpSp spsp on spC.SP = spsp.CHILD_SP and spC.SP_VERSION in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = spC.SP) else spsp.CHILD_SP_VERSION end)
   left outer join RndSuite.RndvSp spP  on spP.SP = spsp.SP and spP.SP_VERSION = spsp.SP_VERSION
   left outer join RndSuite.RndvRepSpIc spic on spii.SP = spic.SP and spii.SP_VERSION = spic.SP_VERSION and spii.ICNODE = spic.ICNODE

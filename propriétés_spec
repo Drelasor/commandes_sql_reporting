@@ -1,0 +1,47 @@
+ 
+ /* Modèle */
+ 
+  EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+select a.DESCRIPTION, a.SP_VALUE+' ['+format(a.SP_VERSION,'0')+']' as SP_VALUE,
+       a.STATUSID as SS, a.EFFECTIVE_FROM, a.EFFECTIVE_TILL,
+	   case when b.LAST_NAME is null then b.FIRST_NAME else b.LAST_NAME+', '+b.FIRST_NAME end as CREATED_BY,
+	   a.CREATED_ON, 
+	   c.DESCRIPTION as STATUS,
+	   ltrim(rtrim(substring(c.SS_STYLE1,7,7))) as STATUS_COLOR
+   from RndSuite.RndvRepSp a
+  inner join RndSuite.RndvContact b on a.CREATED_BY = b.CONTACT
+  inner join RndSuite.RndvSs c on a.STATUSID = c.SS
+  where a.UNIQUE_ID = @p_UniqueID
+  
+  
+  /* Nouvelle version */
+  
+  
+    EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+    select spP.DESCRIPTION, spP.SP_VALUE+' ['+format(spP.SP_VERSION,'0')+']' as SP_VALUE,
+        spP.STATUSID as SS, spP.EFFECTIVE_FROM, spP.EFFECTIVE_TILL,
+        case when b.LAST_NAME is null then b.FIRST_NAME else b.LAST_NAME+', '+b.FIRST_NAME end as CREATED_BY,
+        spP.CREATED_ON, 
+        c.DESCRIPTION as STATUS,
+        ltrim(rtrim(substring(c.SS_STYLE1,7,7))) as STATUS_COLOR
+    from RndSuite.RndvRepSp spP
+    inner join RndSuite.RndvSpSp spsp on spsp.SP = spP.SP and spsp.SP_VERSION = spP.SP_VERSION
+    inner join RndSuite.RndvSp spC on spC.SP = spsp.SP_CHILD and spC.SP_VERSION in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = spC.SP) else spsp.CHILD_SP_VERSION end)
+    inner join RndSuite.RndvContact b on spP.CREATED_BY = b.CONTACT
+    inner join RndSuite.RndvSs c on spP.STATUSID = c.SS
+    where spC.UNIQUE_ID = @p_UniqueID
+
+    union all
+
+    select spC.DESCRIPTION, spC.SP_VALUE+' ['+format(spC.SP_VERSION,'0')+']' as SP_VALUE,
+        spC.STATUSID as SS, spC.EFFECTIVE_FROM, spC.EFFECTIVE_TILL,
+        case when b.LAST_NAME is null then b.FIRST_NAME else b.LAST_NAME+', '+b.FIRST_NAME end as CREATED_BY,
+        spC.CREATED_ON, 
+        c.DESCRIPTION as STATUS,
+        ltrim(rtrim(substring(c.SS_STYLE1,7,7))) as STATUS_COLOR
+    from RndSuite.RndvRepSp spC
+    inner join RndSuite.RndvSpSp spsp on spC.SP = spsp.CHILD_SP and spC.SP_VERSION  in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = spC.SP) else spsp.CHILD_SP_VERSION end)
+    inner join RndSuite.RndvSp spP on spsp.SP= spP.SP and spsp.SP_VERSION
+    inner join RndSuite.RndvContact b on spC.CREATED_BY = b.CONTACT
+    inner join RndSuite.RndvSs c on spC.STATUSID = c.SS
+    where spC.UNIQUE_ID = @p_UniqueID

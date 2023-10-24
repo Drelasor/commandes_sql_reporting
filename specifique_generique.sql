@@ -33,7 +33,7 @@ EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
 --affichage parent 
 select p.SP, p.SP_VALUE, p.UNIQUE_ID from RndSuite.RndvSp p
 left join RndSuite.RndvSpSp spsp on p.SP = spsp.SP and p.SP_VERSION = spsp.SP_VERSION 
-left join RndSuite.RndvSp c on c.SP = spsp.CHILD_SP and c.SP_VERSION in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = p.SP) else spsp.CHILD_SP_VERSION end)
+left join RndSuite.RndvSp c on c.SP = spsp.CHILD_SP and c.SP_VERSION in ( select CASE spsp.CHILD_SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = c.SP) else spsp.CHILD_SP_VERSION end)
 
 
 where (c.UNIQUE_ID in (@p_UniqueID))
