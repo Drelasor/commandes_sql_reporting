@@ -113,8 +113,6 @@ create table #TempRep
 )
 
 delete from #TempRep
-pass@
-
 -- YOU CAN LIST THE TASKS WHERE THE REPORT SHOULD BE AVAILABLE, OR ENTER 'ALL'. EXAMPLES:
 -- INSERT #TempRep VALUES (1,N'SampleReport',N'Sample report',N'Sample report',N'%2fReports',N'sample',N'sclist',N'10,25',N'');
 -- INSERT #TempRep VALUES (2,N'SpecificationReport',N'Spec report',N'Spec report',N'%2fReports',N'specification',N'speclist',N'ALL',N'');
