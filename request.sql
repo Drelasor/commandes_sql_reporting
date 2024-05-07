@@ -1,6 +1,9 @@
 --Recuperation données formule + dec + client
 select distinct
-form.RQ_VALUE, client.DESCRIPTION as nom_client, spiclang.DSP_TITLE as ic_client_form, spii.II_SHORT_DESC as ii_shortdesc, spiilang.DSP_TITLE , spii.IIVALUE, decprop.DESCRIPTION
+form.RQ_VALUE, client.DESCRIPTION as nom_client, form.CREATION_DATE, formIcLang.DSP_TITLE as form_IC,formIi.II_SHORT_DESC as ii_shortDesc ,formIiLang.DSP_TITLE as form_dsp_ii, formIiLang.IIVALUE as form_value  ,
+spiclang.DSP_TITLE as ic_client_form, 
+spii.II_SHORT_DESC as client_ii_shortdesc, spiilang.DSP_TITLE as client_dsp , spii.IIVALUE as client_value, decprop.DESCRIPTION
+
 
 from RndSuite.RndtRq as form
 
@@ -33,7 +36,7 @@ left join RndSuite.RndtSpIi as decspii on spii.SP = decspic.SP and decspii.SP_VE
 Left join RndSuite.RndtSpIiLang as decspiilang on decspiilang.SP = decspii.SP and decspiilang.SP_VERSION = decspii.SP_VERSION and decspiilang.IC = decspii.IC and decspiilang.ICNODE = spii.ICNODE and decspiilang.IINODE = spii.IINODE
 
 
-where form.RQ_VALUE = 'FM20240402-4'
+where form.RQ_VALUE = 'FM20240402-9'
 order by spiclang.DSP_TITLE desc
 
 
@@ -154,3 +157,7 @@ join RndSuite.RndtSpIiPpsgCell cell on ppsg_row.SP = cell.SP and ppsg_row.SP_VER
 
 where form.RQ_VALUE = 'FM20240416-2' and spic.IC = 146  and sp.SP_VALUE = '100012343'
 order by COL_TP asc;
+
+-- url rapport 
+
+https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fformulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
