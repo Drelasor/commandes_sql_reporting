@@ -122,41 +122,74 @@ group by valeur_distincte,  nombre_sp
 
 // ppsg 
 
-select distinct
+select 
+DISTINCT 
+ppsg_row.PR_SEQ as PR_SEQ,
+          e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
+          case when spii.DSP_TP = '@' then
+                 case e.COL_TYPE
+                     when 'STDPROP_VTP' then
+                           case e.COL_LINK
+                                  when 'ShortDescription' then cast((select SHORT_DESC from RndSuite.RndvRepSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Description' then cast((select DESCRIPTION from RndSuite.RndvRepSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Format' then cast((select FORMAT from RndSuite.RndvRepSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Unit' then cast((select UNIT from RndSuite.RndvRepSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'ValueS' then cast((select VALUE_S from RndSuite.RndvRepSpIiPpsgCell mycells where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                           else 
+                                   cast((select VALUE from RndSuite.RndvRepSpIiPpsgCell mycells where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                                  
+                           end 
+                     when 'STDPROP_UOM' then ppsg_row.UNIT
+                     when 'AU_VTP' then
+                           cast((select VALUE_S from RndSuite.RndvRepSpIiPpsgCell mycells where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
+                                  
+					 when 'DA_VTP' then
+                           cast((select VALUE_S from RndSuite.RndvRepSpIiPpsgCell mycells where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
+                     else 'COL_TYPE NON RECOGNIZED !'
+                 end 
+          else null
+          end as PR_VALUE
 
-sp.SP_VALUE, spic.DSP_TITLE,ppsg_row.DESCRIPTION, cell.VALUE, cell.VALUE_S, cell.PR_SEQ as cell_PR_SEQ, ppsg_row.PR_SEQ as row_PR_SEQ,cell.COL_TP, form.RQ
 
 from RndSuite.RndtRq as form
 
-join RndSuite.RndtRqIc as formIc on formIc.RQ = form.RQ
-join RndSuite.RndtRqIcLang as formIcLang on formIcLang.RQ = formIc.RQ and formIcLang.IC = formIc.IC and formIcLang.ICNODE = formIc.ICNODE  
+left join RndSuite.RndtRqIc as formIc on formIc.RQ = form.RQ
+left join RndSuite.RndtRqIcLang as formIcLang on formIcLang.RQ = formIc.RQ and formIcLang.IC = formIc.IC and formIcLang.ICNODE = formIc.ICNODE  
 
-join RndSuite.RndtRqIi as formIi on formIi.RQ = formIc.RQ and formIi.IC = formIc.IC and formIi.ICNODE = formIc.ICNODE
-join RndSuite.RndtRqIiLang as formIiLang on formIiLang.RQ = formIi.RQ and formIiLang.II = formIi.II and formIiLang.IINODE = formIi.IINODE  and formIiLang.IC = formIi.IC and formIiLang.ICNODE = formIi.ICNODE
+left join RndSuite.RndtRqIi as formIi on formIi.RQ = formIc.RQ and formIi.IC = formIc.IC and formIi.ICNODE = formIc.ICNODE
+left join RndSuite.RndtRqIiLang as formIiLang on formIiLang.RQ = formIi.RQ and formIiLang.II = formIi.II and formIiLang.IINODE = formIi.IINODE  and formIiLang.IC = formIi.IC and formIiLang.ICNODE = formIi.ICNODE
 
-join RndSuite.RndtFmMat as mat on form.RQ = mat.RQ 
-join RndSuite.RndtSp as sp on sp.SP = mat.SP and sp.ACTIVE = 1
-join RndSuite.RndtSpIc as spic on spic.SP = sp.SP 
-join RndSuite.RndtSpIi as spii on spii.SP = spic.SP and spii.SP_VERSION = spic.SP_VERSION and spii.ICNODE = spic.ICNODE and spii.IC = spic.IC	
-join RndSuite.RndtSpIiPpsgRow as ppsg_row on ppsg_row.SP = spii.SP and ppsg_row.SP_VERSION = spii.SP_VERSION and ppsg_row.IC = spii.IC and ppsg_row.ICNODE = spii.ICNODE and ppsg_row.IINODE = spii.IINODE
-join RndSuite.RndtSpIiPpsgCell cell on ppsg_row.SP = cell.SP and ppsg_row.SP_VERSION = ppsg_row.SP_VERSION and ppsg_row.IC = cell.IC and ppsg_row.ICNODE = cell.ICNODE and ppsg_row.IINODE = cell.IINODE and cell.PR_SEQ = ppsg_row.PR_SEQ
---join RndSuite.RndtSpIiLy spiily on spii.SP = spiily.SP and spii.SP_VERSION = spiily.SP_VERSION and spii.ICNODE = spiily.ICNODE and spii.IINODE = spiily.IINODE
---join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID, 
---        ltrim(rtrim(substring(COL_TP,1,charindex('@',COL_TP,1)-1))) as COL_TYPE,
---              ltrim(rtrim(substring(COL_TP,charindex('@',COL_TP,1)+1,1000))) as COL_LINK,
---              DISP_TITLE,
---              DISP_WIDTH,
---              COL_HIDDEN,
---              COL_LEN,
---              COL_ALIGNMENT,
---              COL_ALIGNMENT_HEADER,
---              COUNT(SEQ) over (partition by LY, VERSION) as COL_NUMBER
---   from RndSuite.RndvLyDetails
---  where COL_HIDDEN <> 1) e on spiily.LY = e.LY and spiily.LY_VERSION = e.LY_VERSION
+left join RndSuite.RndtFmMat as mat on form.RQ = mat.RQ 
+left join RndSuite.RndtSp as sp on sp.SP = mat.SP and sp.ACTIVE = 1
+left join RndSuite.RndtSpIc as spic on spic.SP = sp.SP
+left join RndSuite.RndtSpIi as spii on spii.SP = spic.SP and spii.SP_VERSION = spic.SP_VERSION and spii.ICNODE = spic.ICNODE and spii.IC = spic.IC	
+left join RndSuite.RndtSpIiPpsgRow as ppsg_row on ppsg_row.SP = spii.SP and ppsg_row.SP_VERSION = spii.SP_VERSION and ppsg_row.IC = spii.IC and ppsg_row.ICNODE = spii.ICNODE and ppsg_row.IINODE = spii.IINODE
+left join RndSuite.RndtSpIiPpsgCell cell on ppsg_row.SP = cell.SP and ppsg_row.SP_VERSION = ppsg_row.SP_VERSION and ppsg_row.IC = cell.IC and ppsg_row.ICNODE = cell.ICNODE and ppsg_row.IINODE = cell.IINODE and cell.PR_SEQ = ppsg_row.PR_SEQ
+left join RndSuite.RndtSpIiLy spiily on spii.SP = spiily.SP and spii.SP_VERSION = spiily.SP_VERSION and spii.ICNODE = spiily.ICNODE and spii.IINODE = spiily.IINODE
+left join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID, 
+        ltrim(rtrim(substring(COL_TP,1,charindex('@',COL_TP,1)-1))) as COL_TYPE,
+              ltrim(rtrim(substring(COL_TP,charindex('@',COL_TP,1)+1,1000))) as COL_LINK,
+              DISP_TITLE,
+              DISP_WIDTH,
+              COL_HIDDEN,
+              COL_LEN,
+              COL_ALIGNMENT,
+              COL_ALIGNMENT_HEADER,
+              COUNT(SEQ) over (partition by LY, VERSION) as COL_NUMBER
+   from RndSuite.RndvLyDetails
+  where COL_HIDDEN <> 1) e on spiily.LY = e.LY and spiily.LY_VERSION = e.LY_VERSION
 
 
 where form.RQ_VALUE = 'FM20240416-2' and spic.IC = 146  and sp.SP_VALUE = '100012343'
-order by COL_TP asc;
+
 
 -- url rapport 
 
