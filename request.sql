@@ -1,10 +1,6 @@
 --Recuperation données formule + dec + client
-select distinct
-form.RQ_VALUE, client.DESCRIPTION as nom_client, form.CREATION_DATE, formIcLang.DSP_TITLE as form_IC,formIi.II_SHORT_DESC as ii_shortDesc ,formIiLang.DSP_TITLE as form_dsp_ii, formIi.IIVALUE as form_value ,
-spiclang.DSP_TITLE as ic_client_form, 
-spii.II_SHORT_DESC as client_ii_shortdesc, spiilang.DSP_TITLE as client_dsp , spii.IIVALUE as client_value, decprop.DESCRIPTION
-
-
+select 
+clientdec.*
 from RndSuite.RndtRq as form
 
 --props formule
@@ -22,13 +18,13 @@ left join RndSuite.RndtSpIi as spii on spii.SP = spic.SP and spii.SP_VERSION = s
 Left join RndSuite.RndtSpIiLang as spiilang on spiilang.SP = spii.SP and spiilang.SP_VERSION = spii.SP_VERSION and spiilang.IC = spii.IC and spiilang.ICNODE = spii.ICNODE and spiilang.IINODE = spii.IINODE
 
 --props du dec
-left join RndSuite.RndtRqRq as rqrq on form.RQ = rqrq.RQ_CHILD
-left join RndSuite.RndtRq as decprop on decprop.RQ = rqrq.RQ
+left join RndSuite.RndtRqRq as rqrq on form.RQ = rqrq.RQ
+left join RndSuite.RndtRq as decprop on decprop.RQ = rqrq.RQ_CHILD
 left join RndSuite.RndtRqIc as decic on decic.RQ = decprop.RQ 
 left join RndSuite.RndtRqIi as decii on decii.RQ = decic.RQ and decii.IC = decic.IC and decii.ICNODE = decic.ICNODE
 
 --client dec
-left join RndSuite.RndtRqSp as rqspdec on rqsp.RQ = form.RQ 
+left join RndSuite.RndtRqSp as rqspdec on rqspdec.RQ = decprop.RQ
 left join RndSuite.RndtSp as clientdec on clientdec.SP = rqspdec.SP and clientdec.SP_VERSION in ( select CASE rqspdec.SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndtSp x where x.SP = clientdec.SP) else rqspdec.SP_VERSION end)
 left join RndSuite.RndtSpIc as decspic on decspic.SP = clientdec.SP 
 Left join RndSuite.RndtSpIcLang as decspiclang on decspiclang.SP = decspic.SP and decspiclang.SP_VERSION = decspic.SP_VERSION and decspiclang.IC = decspic.IC and decspiclang.ICNODE = decspic.ICNODE
@@ -36,9 +32,8 @@ left join RndSuite.RndtSpIi as decspii on spii.SP = decspic.SP and decspii.SP_VE
 Left join RndSuite.RndtSpIiLang as decspiilang on decspiilang.SP = decspii.SP and decspiilang.SP_VERSION = decspii.SP_VERSION and decspiilang.IC = decspii.IC and decspiilang.ICNODE = spii.ICNODE and decspiilang.IINODE = spii.IINODE
 
 
-where form.RQ_VALUE = 'FM20240402-9'
+where form.RQ_VALUE = 'FM20240528-6'
 order by spiclang.DSP_TITLE desc
-
 
 
 //récuperation code dluo
@@ -208,23 +203,10 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
 WHERE form.RQ_VALUE = 'FM20240523-5' 
 -- url rapport 
 
-https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fformulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
+https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fFormulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
 
 
 -- Europe, France, Hors_EU, Latina , Middle East, North_America, Oceania, Asia, Africa
--- enfant * parent / 1000
---
- -- 0 = interdit , 100 = autorisé (fait)
-
- -- sp > sp parent-quantité > sp parent-quantité
-
-
- -- si une valeur est strictement inferieure à 100 et strictement superieur à 0
-        -- cas sans parent  => (quantité/1000) %incorporation , stocker la valeur, repeter l'operation jusqu'au parent initial
-        -- cas parent -- prendre quantité de la matière  => voir si parent matière  => (quantité * quantité_parent)/1000 => ((resultat / 1000) %incorporation)
-        -- cas matières matières identiques dans plusieurs parents
-    -- Si le resultat est superieur à la valeur du dosage = Interdit 
-
 
 =IIF(Fields!PR_HEADER_DESC.Value = "Pays", Fields!PR_VALUE.Value,  
     IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
@@ -235,9 +217,22 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 
  -- 'FM20240523-5' 
 
- -- 2 Objectifs principaux 
+    IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
+        IIF(Fields!PR_VALUE.Value="0","Interdit",  
+           IIF(Fields!PR_VALUE.Value >"0" and Fields!PR_VALUE.Value <"100",
+             IIF(Fields!final_result.Value>Fields!PR_VALUE.Value, "Interdit", "Autorisé"), Fields!PR_VALUE.Value)))
+ 
+ =IIF(Fields!PR_HEADER_DESC.Value = "Pays", Fields!PR_VALUE.Value,  
+    IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
+        IIF(Fields!PR_VALUE.Value="0","Interdit", Fields!PR_VALUE.Value )))
 
 
- 
- 
- 
+
+        =IIF(CDbl(Fields!PR_VALUE.Value) = 100, "Autorisé", 
+        IIF(CDbl(Fields!PR_VALUE.Value=0,"Interdit",  
+           IIF(CDbl(Fields!PR_VALUE.Value) >0 and CDbl(Fields!PR_VALUE.Value) <100,
+             IIF(Fields!final_result.Value>CDbl(Fields!PR_VALUE.Value), "Interdit", "Autorisé"), ""))))
+
+
+
+-- FM20240528-2 test pour les calculs
