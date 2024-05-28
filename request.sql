@@ -114,10 +114,10 @@ CROSS JOIN (
 
 group by valeur_distincte,  nombre_sp
 
-// ppsg 
+-- Autorisation pays
 select 
 DISTINCT
-sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
+formIi.IIVALUE as incorporation, mat.LEVEL,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC, spic.DSP_TITLE as IC_DSP_TITLE,
           spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, 
                    spii.POS_X, spii.POS_Y,
@@ -155,21 +155,37 @@ sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
                      else 'COL_TYPE NON RECOGNIZED !'
                  end 
           else null
-          end as PR_VALUE, mat.QUANTITY,
-		  comp.CP, comp.DESCRIPTION as CP_DESC, comp.SHORT_DESC as CP_SHORT_DESC, comp.ORDER_NUMBER as CP_ORDER,
-          comp.QUANTITY
-	
+          end as PR_VALUE, 
+		  comp.CP, comp.DESCRIPTION as CP_DESC, comp.SHORT_DESC as CP_SHORT_DESC,  mat.QUANTITY,matp1.QUANTITY as quantity_parent1, matp2.QUANTITY as quantity_parent2, matp3.QUANTITY as quantity_parent3,
 
+		
+CASE
+    WHEN matp1.QUANTITY IS NOT NULL THEN 
+        CASE
+            WHEN matp2.QUANTITY IS NOT NULL THEN 
+                CASE
+                    WHEN matp3.QUANTITY IS NOT NULL THEN 
+                        (((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000) * matp3.QUANTITY / 1000
+                    ELSE 
+                        ((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000 * 1
+                END
+            ELSE 
+                (mat.QUANTITY * matp1.QUANTITY) / 1000 * 1
+        END
+    ELSE 
+        mat.QUANTITY * 1
+END AS final_result
+	
+		  
 from RndSuite.RndtRq as form
 
-left outer join RndSuite.RndtRqIc as formIc on formIc.RQ = form.RQ
-left outer join RndSuite.RndtRqIcLang as formIcLang on formIcLang.RQ = formIc.RQ and formIcLang.IC = formIc.IC and formIcLang.ICNODE = formIc.ICNODE  
-
-left outer join RndSuite.RndtRqIi as formIi on formIi.RQ = formIc.RQ and formIi.IC = formIc.IC and formIi.ICNODE = formIc.ICNODE
-left outer join RndSuite.RndtRqIiLang as formIiLang on formIiLang.RQ = formIi.RQ and formIiLang.II = formIi.II and formIiLang.IINODE = formIi.IINODE  and formIiLang.IC = formIi.IC and formIiLang.ICNODE = formIi.ICNODE
+left outer join RndSuite.RndtRqIi as formIi on formIi.RQ = form.RQ and formIi.II_SHORT_DESC = 'Incorporation'
 
 left outer join RndSuite.RndtFmMat as mat on form.RQ = mat.RQ 
 left outer join RndSuite.RndtSp as sp on sp.SP = mat.SP and sp.SP_VERSION = mat.SP_VERSION
+left outer join RndSuite.RndtFmMat as matp1 on mat.PARENT = matp1.UNIQUE_ID
+left outer join RndSuite.RndtFmMat as matp2 on matp1.PARENT = matp2.UNIQUE_ID
+left outer join RndSuite.RndtFmMat as matp3 on matp2.PARENT = matp3.UNIQUE_ID
 left outer join RndSuite.RndtSpIc as spic on spic.SP = sp.SP and spic.SP_VERSION = sp.SP_VERSION
 left outer join RndSuite.RndtSpIi as spii on spii.SP = spic.SP and spii.SP_VERSION = spic.SP_VERSION and spii.ICNODE = spic.ICNODE and spii.IC = spic.IC	
 left outer join RndSuite.RndtSpIiPpsgRow as ppsg_row on ppsg_row.SP = spii.SP and ppsg_row.SP_VERSION = spii.SP_VERSION and ppsg_row.IC = spii.IC and ppsg_row.ICNODE = spii.ICNODE and ppsg_row.IINODE = spii.IINODE
@@ -189,8 +205,7 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
    from RndSuite.RndtLyDetails
   where COL_HIDDEN <> 1) e on spiily.LY = e.LY and spiily.LY_VERSION = e.LY_VERSION
 
-WHERE form.RQ_VALUE = 'FM20240329-0' 
-
+WHERE form.RQ_VALUE = 'FM20240523-5' 
 -- url rapport 
 
 https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fformulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
@@ -210,16 +225,13 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
         -- cas matières matières identiques dans plusieurs parents
     -- Si le resultat est superieur à la valeur du dosage = Interdit 
 
- -- si level = 1, (quantité/1000)%incorporation
- -- si level = 2, ((quantité * quantité_parent)/1000)%incorporation quantité parent -- sp -- quantité parent 
- -- si level = 3, ((quantité * quantité_parent)/1000)%incorporation 
 
 =IIF(Fields!PR_HEADER_DESC.Value = "Pays", Fields!PR_VALUE.Value,  
     IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
         IIF(Fields!PR_VALUE.Value="0","Interdit",
-            IIF(Fields!PR_VALUE.Value >"0" and Fields!PR_VALUE.Value <"100", 
-                IIF(Fields!LEVEL.Value  = "3", ((Fields!QUANTITY.Value*Fields!quantity_parent.VALUE)/1000)))
-    )))
+        IIF(Fields!PR_VALUE.Value >"0" and Fields!PR_VALUE.Value <"100",
+           :
+    ))))
 
  -- 'FM20240523-5' 
 
