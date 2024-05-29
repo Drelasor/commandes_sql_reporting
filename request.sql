@@ -1,6 +1,13 @@
 --Recuperation données formule + dec + client
-select 
-clientdec.*
+select distinct
+client.DESCRIPTION as client_form_nom, 
+spic.IC_SHORT_DESC as client_form_short_desc_ic,
+spii.II_SHORT_DESC as client_form_short_desc_ii,
+spii.IIVALUE as client_form_value ,
+clientdec.DESCRIPTION as client_dec_nom,
+decspic.IC_SHORT_DESC as client_dec_short_desc_ic,
+decspii.II_SHORT_DESC as client_dec_short_desc_ii,
+decspii.IIVALUE as client_dec_value
 from RndSuite.RndtRq as form
 
 --props formule
@@ -236,3 +243,13 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 
 
 -- FM20240528-2 test pour les calculs
+
+
+=IIf(Fields!PR_HEADER_DESC.Value = "Pays", "", IIf(Fields!PR_HEADER_DESC.Value="Négoce", "", 
+IIf(Fields!PR_HEADER_DESC.Value="Date","", 
+IIf(Fields!PR_HEADER_DESC.Value="Commentaires", "", Fields!PR_HEADER_DESC.Value))))
+
+
+
+
+
