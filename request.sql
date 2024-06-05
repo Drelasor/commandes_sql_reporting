@@ -40,7 +40,7 @@ Left join RndSuite.RndtSpIiLang as decspiilang on decspiilang.SP = decspii.SP an
 
 
 where form.RQ_VALUE = 'FM20240528-6'
-order by spiclang.DSP_TITLE desc
+
 
 
 //récuperation code dluo
@@ -215,41 +215,24 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 
 -- Europe, France, Hors_EU, Latina , Middle East, North_America, Oceania, Asia, Africa
 
-=IIF(Fields!PR_HEADER_DESC.Value = "Pays", Fields!PR_VALUE.Value,  
-    IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
-        IIF(Fields!PR_VALUE.Value="0","Interdit",
-        IIF(Fields!PR_VALUE.Value >"0" and Fields!PR_VALUE.Value <"100",
-           :
-    ))))
 
  -- 'FM20240523-5' 
 
-    IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
-        IIF(Fields!PR_VALUE.Value="0","Interdit",  
-           IIF(Fields!PR_VALUE.Value >"0" and Fields!PR_VALUE.Value <"100",
-             IIF(Fields!final_result.Value>Fields!PR_VALUE.Value, "Interdit", "Autorisé"), Fields!PR_VALUE.Value)))
- 
- =IIF(Fields!PR_HEADER_DESC.Value = "Pays", Fields!PR_VALUE.Value,  
-    IIF(Fields!PR_VALUE.Value = "100", "Autorisé", 
-        IIF(Fields!PR_VALUE.Value="0","Interdit", Fields!PR_VALUE.Value )))
-
-
-
-        =IIF(CDbl(Fields!PR_VALUE.Value) = 100, "Autorisé", 
-        IIF(CDbl(Fields!PR_VALUE.Value=0,"Interdit",  
-           IIF(CDbl(Fields!PR_VALUE.Value) >0 and CDbl(Fields!PR_VALUE.Value) <100,
-             IIF(Fields!final_result.Value>CDbl(Fields!PR_VALUE.Value), "Interdit", "Autorisé"), ""))))
-
-
-
 -- FM20240528-2 test pour les calculs
+--FM20240402-11
+--'FM20240523-5' 
+
+--FM20240603-3 client_form
+--FM20240528-6 client_dec
 
 
-=IIf(Fields!PR_HEADER_DESC.Value = "Pays", "", IIf(Fields!PR_HEADER_DESC.Value="Négoce", "", 
-IIf(Fields!PR_HEADER_DESC.Value="Date","", 
-IIf(Fields!PR_HEADER_DESC.Value="Commentaires", "", Fields!PR_HEADER_DESC.Value))))
-
-
-
-
-
+=IIf(Fields!PR_HEADER_DESC.Value = "Pays", "", 
+   IIf(Fields!PR_HEADER_DESC.Value = "Négoce", "", 
+    IIf(Fields!PR_HEADER_DESC.Value = "Date", "",  
+     IIf(Fields!PR_HEADER_DESC.Value = "Commentaires", "",      
+      IIf(IsNothing(Fields!PR_VALUE.Value), "null",       
+       IIf(CDbl(Fields!PR_VALUE.Value) = 100, "Autorisé",                
+        IIf(CDbl(Fields!PR_VALUE.Value) = 0, "Interdit",              
+          IIf(CDbl(Fields!PR_VALUE.Value) > 0 And CDbl(Fields!PR_VALUE.Value) < 100,                 
+           IIf(CDbl(Fields!final_result.Value) > CDbl(Fields!PR_VALUE.Value), "Interdit", "Autorisé"),  ""
+ ))))))))
