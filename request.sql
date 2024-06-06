@@ -216,8 +216,6 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 -- Europe, France, Hors_EU, Latina , Middle East, North_America, Oceania, Asia, Africa
 
 
- -- 'FM20240523-5' 
-
 -- FM20240528-2 test pour les calculs
 --FM20240402-11
 --'FM20240523-5' 
@@ -225,14 +223,47 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 --FM20240603-3 client_form
 --FM20240528-6 client_dec
 
+=Switch(
+    IsNothing(Fields!PR_VALUE.Value), "",
+    Fields!PR_HEADER_DESC.Value = "Pays", "",
+    CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) = 100, "Autorisé",
+    CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) = 0, "interdit",
+    CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) > 0 And CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) < 100, 
+        IIf(Fields!final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) > CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")), "Interdit", "Autorisé")
+)
 
-=IIf(Fields!PR_HEADER_DESC.Value = "Pays", "", 
-   IIf(Fields!PR_HEADER_DESC.Value = "Négoce", "", 
-    IIf(Fields!PR_HEADER_DESC.Value = "Date", "",  
-     IIf(Fields!PR_HEADER_DESC.Value = "Commentaires", "",      
-      IIf(IsNothing(Fields!PR_VALUE.Value), "null",       
-       IIf(CDbl(Fields!PR_VALUE.Value) = 100, "Autorisé",                
-        IIf(CDbl(Fields!PR_VALUE.Value) = 0, "Interdit",              
-          IIf(CDbl(Fields!PR_VALUE.Value) > 0 And CDbl(Fields!PR_VALUE.Value) < 100,                 
-           IIf(CDbl(Fields!final_result.Value) > CDbl(Fields!PR_VALUE.Value), "Interdit", "Autorisé"),  ""
- ))))))))
+
+
+-- debut plusieurs quantité / SP
+SELECT 
+    SP,
+    SUM(final_result) AS final_result
+FROM (
+    SELECT 
+        DISTINCT mat.SP,
+        CASE
+            WHEN matp1.QUANTITY IS NOT NULL THEN 
+                CASE
+                    WHEN matp2.QUANTITY IS NOT NULL THEN 
+                        CASE
+                            WHEN matp3.QUANTITY IS NOT NULL THEN 
+                                (((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000) * matp3.QUANTITY / 1000
+                            ELSE 
+                                ((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000 * 1
+                        END
+                    ELSE 
+                        (mat.QUANTITY * matp1.QUANTITY) / 1000 * 1
+                END
+            ELSE 
+                mat.QUANTITY * 1
+        END AS final_result
+    FROM RndSuite.RndtRq AS form
+    LEFT OUTER JOIN RndSuite.RndtRqIi AS formIi ON formIi.RQ = form.RQ AND formIi.II_SHORT_DESC = 'Incorporation'
+    LEFT OUTER JOIN RndSuite.RndtFmMat AS mat ON form.RQ = mat.RQ 
+    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp1 ON mat.PARENT = matp1.UNIQUE_ID
+    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp2 ON matp1.PARENT = matp2.UNIQUE_ID
+    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp3 ON matp2.PARENT = matp3.UNIQUE_ID
+    WHERE form.RQ_VALUE = 'FM20240523-5'
+) AS subquery
+GROUP BY SP
+ORDER BY SP;
