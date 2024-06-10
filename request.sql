@@ -176,7 +176,8 @@ CASE
         END
     ELSE 
         mat.QUANTITY * 1
-END AS final_result
+END AS final_result,
+final_results.sum_final_result
 	
 		  
 from RndSuite.RndtRq as form
@@ -206,7 +207,39 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
               COUNT(SEQ) over (partition by LY, VERSION) as COL_NUMBER
    from RndSuite.RndtLyDetails
   where COL_HIDDEN <> 1) e on spiily.LY = e.LY and spiily.LY_VERSION = e.LY_VERSION
-
+  LEFT JOIN (
+    SELECT 
+        SP,
+        SUM(final_result) AS sum_final_result
+    FROM (
+        SELECT 
+            DISTINCT mat.SP,
+            CASE
+                WHEN matp1.QUANTITY IS NOT NULL THEN 
+                    CASE
+                        WHEN matp2.QUANTITY IS NOT NULL THEN 
+                            CASE
+                                WHEN matp3.QUANTITY IS NOT NULL THEN 
+                                    (((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000) * matp3.QUANTITY / 1000
+                                ELSE 
+                                    ((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000 * 1
+                            END
+                        ELSE 
+                            (mat.QUANTITY * matp1.QUANTITY) / 1000 * 1
+                    END
+                ELSE 
+                    mat.QUANTITY * 1
+            END AS final_result
+        FROM RndSuite.RndtRq AS form
+        LEFT OUTER JOIN RndSuite.RndtRqIi AS formIi ON formIi.RQ = form.RQ AND formIi.II_SHORT_DESC = 'Incorporation'
+        LEFT OUTER JOIN RndSuite.RndtFmMat AS mat ON form.RQ = mat.RQ 
+        LEFT OUTER JOIN RndSuite.RndtFmMat AS matp1 ON mat.PARENT = matp1.UNIQUE_ID
+        LEFT OUTER JOIN RndSuite.RndtFmMat AS matp2 ON matp1.PARENT = matp2.UNIQUE_ID
+        LEFT OUTER JOIN RndSuite.RndtFmMat AS matp3 ON matp2.PARENT = matp3.UNIQUE_ID
+        WHERE form.RQ_VALUE = 'FM20240523-5'
+    ) AS subquery
+    GROUP BY SP
+) AS final_results ON sp.SP = final_results.SP
 WHERE form.RQ_VALUE = 'FM20240523-5' 
 -- url rapport 
 
@@ -234,36 +267,3 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 
 
 
--- debut plusieurs quantité / SP
-SELECT 
-    SP,
-    SUM(final_result) AS final_result
-FROM (
-    SELECT 
-        DISTINCT mat.SP,
-        CASE
-            WHEN matp1.QUANTITY IS NOT NULL THEN 
-                CASE
-                    WHEN matp2.QUANTITY IS NOT NULL THEN 
-                        CASE
-                            WHEN matp3.QUANTITY IS NOT NULL THEN 
-                                (((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000) * matp3.QUANTITY / 1000
-                            ELSE 
-                                ((mat.QUANTITY * matp1.QUANTITY) / 1000) * matp2.QUANTITY / 1000 * 1
-                        END
-                    ELSE 
-                        (mat.QUANTITY * matp1.QUANTITY) / 1000 * 1
-                END
-            ELSE 
-                mat.QUANTITY * 1
-        END AS final_result
-    FROM RndSuite.RndtRq AS form
-    LEFT OUTER JOIN RndSuite.RndtRqIi AS formIi ON formIi.RQ = form.RQ AND formIi.II_SHORT_DESC = 'Incorporation'
-    LEFT OUTER JOIN RndSuite.RndtFmMat AS mat ON form.RQ = mat.RQ 
-    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp1 ON mat.PARENT = matp1.UNIQUE_ID
-    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp2 ON matp1.PARENT = matp2.UNIQUE_ID
-    LEFT OUTER JOIN RndSuite.RndtFmMat AS matp3 ON matp2.PARENT = matp3.UNIQUE_ID
-    WHERE form.RQ_VALUE = 'FM20240523-5'
-) AS subquery
-GROUP BY SP
-ORDER BY SP;
