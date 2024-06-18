@@ -1,0 +1,55 @@
+-- url rapport 
+
+https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fFormulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
+
+
+-- Europe, France, Hors_EU, Latina , Middle East, North_America, Oceania, Asia, Africa
+
+
+-- FM20240528-2 test pour les calculs
+--FM20240402-11
+--'FM20240523-5' 
+
+--FM20240603-3 client_form
+--FM20240528-6 client_dec
+
+=Switch(
+IsNothing(Fields!PR_VALUE.Value), "",
+   Fields!PR_VALUE.Value = "100", "",
+    Fields!PR_VALUE.Value= "0", "interdit" & Fields!PR_HEADER_DESC.Value &" " ,
+    CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) > 0 And CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")) < 100, 
+        IIf(Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) > CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")), "Interdit "& Fields!PR_HEADER_DESC.Value &" "& Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) & " > " & CDbl(Replace(Fields!PR_VALUE.Value, ".", ",")), "")
+)
+
+
+-- expression valeur consignes client 
+=IIf(Fields!client_form_short_desc_ii.Value ="Formulation", Fields!client_form_value.Value, IIf(Fields!client_dec_short_desc_ii.Value ="Formulation", Fields!client_dec_value.Value , Nothing) )
+-- expression visibilité consignes client 
+=IIf(Fields!client_form_short_desc_ii.Value ="Formulation", False, IIf(Fields!client_dec_short_desc_ii.Value ="Formulation",False , True) )
+
+
+
+// champs MO/DAP
+
+
+Text_rich (spii.II_SHORT_DESC)
+
+
+spii.DSP_TITLE
+DAP :
+Conception :
+MODE OPERATOIRE PROD :
+
+
+
+Process_PPSG
+PMSF
+
+-- on recupere la premiere ligne dans les matiere (uniquement les root)
+-- je regarde si ce code root est present dans les specs PMSF
+-- ERP information générale (geninfofp), spec pmsf lié au code root. 
+-- Dans le ppsg je recupere le commentaire qualité en lien avec le client selectionné.
+
+
+
+=IIf(Fields!PR_HEADER_DESC.Value= "Présent", IIf(Fields!PR_VALUE.Value = "false","Absence" ,"Présent" ),"")
