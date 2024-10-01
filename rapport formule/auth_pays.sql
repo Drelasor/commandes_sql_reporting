@@ -7,8 +7,11 @@ formIi.IIVALUE as incorporation, mat.LEVEL,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spi
                    spii.POS_X, spii.POS_Y,
 				   ppsg_row.PR, ppsg_row.SHORT_DESC as PR_SHORT_DESC, ppsg_row.ORDER_NUMBER as PR_ORDER, ppsg_row.PR_SEQ as PR_SEQ,
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
-          e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER,
-          e.COL_HIDDEN, e.COL_LEN,
+          e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER, 
+
+		cast((select DESCRIPTION from RndSuite.RndtSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+                                                                           ) as nvarchar) as TITLE,
+
           case when spii.DSP_TP = '@' then
                  case e.COL_TYPE
                      when 'STDPROP_VTP' then
@@ -40,7 +43,7 @@ formIi.IIVALUE as incorporation, mat.LEVEL,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spi
                  end 
           else null
           end as PR_VALUE, 
-		  comp.CP, comp.DESCRIPTION as CP_DESC, comp.SHORT_DESC as CP_SHORT_DESC,  mat.QUANTITY,matp1.QUANTITY as quantity_parent1, matp2.QUANTITY as quantity_parent2, matp3.QUANTITY as quantity_parent3,
+		  comp.CP, comp.DESCRIPTION as CP_DESC, comp.SHORT_DESC as CP_SHORT_DESC,  mat.QUANTITY,matp1.QUANTITY as quantity_parent1, matp2.QUANTITY as quantity_parent2, matp3.QUANTITY as quantity_parent3,	
 
 		
 CASE
@@ -64,7 +67,10 @@ final_results.sum_final_result
 		  
 from RndSuite.RndtRq as form
 
-left outer join RndSuite.RndtRqIi as formIi on formIi.RQ = form.RQ and formIi.II_SHORT_DESC = 'Incorporation'
+
+
+left outer join RndSuite.RndtRqIc as formIc on formIc.RQ = form.RQ  and formIc.IC_SHORT_DESC = 'Formula Setting' 
+left outer join RndSuite.RndtRqIi as formIi on formIi.RQ = formIc.RQ and formIi.IC = formIc.IC and formIi.ICNODE = formIc.ICNODE and formIi.II_SHORT_DESC = 'Incorporation'
 
 left outer join RndSuite.RndtFmMat as mat on form.RQ = mat.RQ 
 left outer join RndSuite.RndtSp as sp on sp.SP = mat.SP and sp.SP_VERSION = mat.SP_VERSION
@@ -118,8 +124,11 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
         LEFT OUTER JOIN RndSuite.RndtFmMat AS matp1 ON mat.PARENT = matp1.UNIQUE_ID
         LEFT OUTER JOIN RndSuite.RndtFmMat AS matp2 ON matp1.PARENT = matp2.UNIQUE_ID
         LEFT OUTER JOIN RndSuite.RndtFmMat AS matp3 ON matp2.PARENT = matp3.UNIQUE_ID
-        WHERE form.RQ_VALUE = 'FM20240523-5'
+        WHERE form.RQ = 543
     ) AS subquery
     GROUP BY SP
 ) AS final_results ON sp.SP = final_results.SP
-WHERE form.RQ_VALUE = 'FM20240523-5' 
+
+
+WHERE form.RQ = 543
+

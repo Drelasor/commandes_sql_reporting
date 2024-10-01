@@ -2,6 +2,7 @@
 
 https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fFormulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
 
+https://cesamseedc/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fFormulationReport&p_ServerName=RDNLOPCENTER\&p_CatalogName=OpcenterRDnL&p_RQ=FM20240416-2&rs:Command=Render&p_TimeZoneId=Romance%20Standard%20Time
 
 -- Europe, France, Hors_EU, Latina , Middle East, North_America, Oceania, Asia, Africa
 
@@ -12,6 +13,10 @@ https://rdnlopcenter.eurogerm.com/ReportServer/Pages/ReportViewer.aspx?%2fReport
 
 --FM20240603-3 client_form
 --FM20240528-6 client_dec
+
+545
+
+
 
 =Switch(
 IsNothing(Fields!PR_VALUE.Value), "",
@@ -53,3 +58,73 @@ PMSF
 
 
 =IIf(Fields!PR_HEADER_DESC.Value= "Présent", IIf(Fields!PR_VALUE.Value = "false","Absence" ,"Présent" ),"")
+
+
+
+=Switch(
+IsNothing(Fields!PR_VALUE.Value), True,
+Fields!PR_HEADER_DESC.Value="Présent" and Fields!PR_VALUE.Value = "false", True, 
+Fields!II_SHORT_DESC.Value <> "Allergens", True,
+Fields!PR_HEADER_DESC.Value = "Description",True,
+Fields!PR_HEADER_DESC.Value = "Présent",False,
+Fields!PR_HEADER_DESC.Value="Non Présent", True,
+Fields!PR_HEADER_DESC.Value= "RCC", True,
+Fields!PR_HEADER_DESC.Value= "RCCM", True,
+True, True
+)
+
+
+
+=Switch(
+    Fields!client_form_short_desc_ic.Value = "Instructions", False,
+    Fields!client_form_short_desc_ic.Value = "Instructions" AND IsNothing(Fields!client_form_value.Value), True,
+   
+    Fields!client_form_short_desc_ii.Value = "Formulation" , False,
+    Fields!client_form_short_desc_ii.Value = "Formulation" AND IsNothing(Fields!client_form_value.Value), True,
+    
+    Fields!client_dec_short_desc_ic.Value = "Instructions", False,
+    Fields!client_dec_short_desc_ic.Value = "Instructions" AND IsNothing(Fields!client_dec_value.Value), True,
+    
+    Fields!client_dec_short_desc_ii.Value = "Formulation" , False,
+    Fields!client_dec_short_desc_ii.Value = "Formulation" AND IsNothing(Fields!client_dec_value.Value), True,
+    
+    True, True
+)
+
+
+Product_Spec_Guidelines
+Formulation
+Industrialization
+DAP_Instructions
+Instructions_certificates
+Other_Instructions
+
+
+
+
+
+=Switch(
+    Fields!client_form_short_desc_ic.Value = "Instructions" AND 
+    (Fields!client_dec_short_desc_ii.Value = "Formulation" OR
+    Fields!client_form_short_desc_ii.Value = "Product_Spec_Guidelines" OR
+    Fields!client_form_short_desc_ii.Value = "Industrialization" OR
+    Fields!client_form_short_desc_ii.Value = "DAP_Instructions" OR
+    Fields!client_form_short_desc_ii.Value = "Instructions_certificates" OR
+    Fields!client_form_short_desc_ii.Value = "Other_Instructions"), False,
+
+    Fields!client_form_short_desc_ic.Value = "RM Requirements" AND 
+    Fields!client_form_short_desc_ii.Value = "Formulation", False,
+
+    Fields!client_dec_short_desc_ic.Value = "Instructions" AND
+    (Fields!client_dec_short_desc_ii.Value = "Formulation" OR
+    Fields!client_dec_short_desc_ii.Value = "Product_Spec_Guidelines" OR
+    Fields!client_dec_short_desc_ii.Value = "Industrialization" OR
+    Fields!client_dec_short_desc_ii.Value = "DAP_Instructions" OR
+    Fields!client_dec_short_desc_ii.Value = "Instructions_certificates" OR
+    Fields!client_dec_short_desc_ii.Value = "Other_Instructions"), False,
+
+    Fields!client_dec_short_desc_ic.Value = "RM Requirements" AND 
+    Fields!client_dec_short_desc_ii.Value = "Formulation", False,
+
+    True, True
+)
