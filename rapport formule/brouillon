@@ -14,7 +14,7 @@ https://cesamseedc/ReportServer/Pages/ReportViewer.aspx?%2fReports%2fCustom%2fFo
 --FM20240603-3 client_form
 --FM20240528-6 client_dec
 
-545
+538
 
 
 
@@ -54,6 +54,7 @@ PMSF
 -- je regarde si ce code root est present dans les specs PMSF
 -- ERP information générale (geninfofp), spec pmsf lié au code root. 
 -- Dans le ppsg je recupere le commentaire qualité en lien avec le client selectionné.
+
 
 
 
@@ -100,9 +101,6 @@ Instructions_certificates
 Other_Instructions
 
 
-
-
-
 =Switch(
     Fields!client_form_short_desc_ic.Value = "Instructions" AND 
     (Fields!client_dec_short_desc_ii.Value = "Formulation" OR
@@ -128,3 +126,5 @@ Other_Instructions
 
     True, True
 )
+
+
