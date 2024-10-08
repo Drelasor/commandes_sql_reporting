@@ -128,3 +128,6 @@ Other_Instructions
 )
 
 
+max(CASE spii.II_SHORT_DESC WHEN 'Short_desc ii 1' 
+then ISNULL(spiilang.IIVALUE,spii.IIVALUE) end) 
+as  FIELD_DESC_1
