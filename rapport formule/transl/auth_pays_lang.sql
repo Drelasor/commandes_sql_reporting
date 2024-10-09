@@ -9,7 +9,9 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSIO
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
           e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER, 
 
-		cast((select DESCRIPTION from RndSuite.RndtSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
+		cast((select max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION)) from RndSuite.RndtSpIiPpsgRow myRow 
+		left join RndSuite.RndtPrLang rowlang on rowlang.PR = myRow.PR and rowlang.LANG_ID = 4
+		where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar) as TITLE,
 
           case when spii.DSP_TP = '@' then
@@ -25,7 +27,7 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSIO
                                   when 'Unit' then cast((select UNIT from RndSuite.RndtSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar)
                                   when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndtSpIiPpsgCell mycells
-								  join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ
+								  left join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = 4
 								   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = e.COL_LINK) as nvarchar)
                            else 
@@ -36,13 +38,13 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSIO
                      when 'STDPROP_UOM' then ppsg_row.UNIT
                      when 'AU_VTP' then
                            cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndtSpIiPpsgCell mycells
-						   join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ
+						   left join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and celllang.LANG_ID = 4
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
                                   
 					 when 'DA_VTP' then
                            cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndtSpIiPpsgCell mycells
-						   join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ
+						   left join RndSuite.RndtSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = 4
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
                      else 'COL_TYPE NON RECOGNIZED !'
@@ -88,6 +90,7 @@ left outer join RndSuite.RndtSpIi as spii on spii.SP = spic.SP and spii.SP_VERSI
 left outer join RndSuite.RndtSpIiPpsgRow as ppsg_row on ppsg_row.SP = spii.SP and ppsg_row.SP_VERSION = spii.SP_VERSION and ppsg_row.IC = spii.IC and ppsg_row.ICNODE = spii.ICNODE and ppsg_row.IINODE = spii.IINODE
 left outer join RndSuite.RndtSpIiPpsgCell cell on ppsg_row.SP = cell.SP and ppsg_row.SP_VERSION = cell.SP_VERSION and ppsg_row.IC = cell.IC and ppsg_row.ICNODE = cell.ICNODE and ppsg_row.IINODE = cell.IINODE and cell.PR_SEQ = ppsg_row.PR_SEQ 
 left outer join RndSuite.RndtSpIiComp comp on spii.SP = comp.SP and spii.SP_VERSION = comp.SP_VERSION and spii.IC = comp.IC and spii.ICNODE = comp.ICNODE and spii.IINODE = comp.IINODE
+left outer join RndSuite.RndtSpIiCompLang complang on complang.UNIQUE_ID = comp.UNIQUE_ID
 left outer join RndSuite.RndtSpIiLy spiily on spii.SP = spiily.SP and spii.SP_VERSION = spiily.SP_VERSION and spii.ICNODE = spiily.ICNODE and spii.IINODE = spiily.IINODE
 left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID, 
         ltrim(rtrim(substring(COL_TP,1,charindex('@',COL_TP,1)-1))) as COL_TYPE,
