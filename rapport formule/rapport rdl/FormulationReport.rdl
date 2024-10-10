@@ -1152,9 +1152,7 @@ join RndSuite.RndvSp as sp on sp.SP = mat.SP and sp.SP_VERSION = mat.SP_VERSION
 join RndSuite.RndvSpIi as spii on spii.SP = sp.SP and spii.SP_VERSION = sp.SP_VERSION
 
 where form.RQ = @p_RQ
-and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
-
-</CommandText>
+and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;</CommandText>
       </Query>
       <Fields>
         <Field Name="SP">
@@ -1677,7 +1675,7 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>25.89741mm</Top>
-            <Left>175.13082mm</Left>
+            <Left>216.40582mm</Left>
             <Height>6.08542mm</Height>
             <Width>116.67284mm</Width>
             <ZIndex>3</ZIndex>
@@ -1694,7 +1692,7 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
                   <Width>47.74142mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>68.93142mm</Width>
+                  <Width>86.10851mm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1779,10 +1777,10 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Auth_Country</DataSetName>
-            <Top>33.74672mm</Top>
-            <Left>175.13082mm</Left>
+            <Top>33.71144mm</Top>
+            <Left>199.22873mm</Left>
             <Height>6.08542mm</Height>
-            <Width>116.67284mm</Width>
+            <Width>133.84993mm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -2690,9 +2688,6 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <DataSetName>Auth_Country</DataSetName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2809,7 +2804,7 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;
                                                 <Value>=Switch(
 IsNothing(Fields!PR_VALUE.Value), "",
    Fields!PR_VALUE.Value = "100", "",
-    Fields!PR_VALUE.Value= "0", "interdit"&amp;" "&amp; Fields!PR_HEADER_DESC.Value &amp;" " ,
+    Fields!PR_VALUE.Value= "0", "interdit"&amp;" "&amp; Fields!PR_HEADER_DESC.Value &amp;" = 0" ,
     Fields!PR_VALUE.Value&gt; 0 And Fields!PR_VALUE.Value &lt; 100, 
         IIf(Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &gt; Fields!PR_VALUE.Value, "Interdit "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &amp; " &gt; " &amp; Fields!PR_VALUE.Value,  "Autorisé "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &amp; " &lt; " &amp; Fields!PR_VALUE.Value)
 )</Value>
@@ -4230,14 +4225,14 @@ False,True
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>183.46201mm</Height>
+        <Height>214.94741mm</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>399.91732mm</Width>
+      <Width>435.85341mm</Width>
       <Page>
         <PageFooter>
           <Height>38.6821mm</Height>
