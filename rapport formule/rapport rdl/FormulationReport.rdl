@@ -1173,6 +1173,349 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;</CommandText>
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="LOV_LANG">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@p_UserName">
+            <Value>=Parameters!p_UserName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+SELECT LANGUAGE AS LANG_ID, SHORT_DESC
+FROM RndSuite.RndvLang</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="LANG_ID">
+          <DataField>LANG_ID</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SHORT_DESC">
+          <DataField>SHORT_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DS_LABELS">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@p_UserName">
+            <Value>=Parameters!p_UserName.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@p_Lang">
+            <Value>=Parameters!p_Lang.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+exec RndSuite.RndprGetRpLabels @p_Lang</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="lbl_Analysis">
+          <DataField>lbl_Analysis</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AssignDate">
+          <DataField>lbl_AssignDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditDate">
+          <DataField>lbl_AuditDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditEventDescription">
+          <DataField>lbl_AuditEventDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditModifiedBy">
+          <DataField>lbl_AuditModifiedBy</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditModifiedProperty">
+          <DataField>lbl_AuditModifiedProperty</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditNewValue">
+          <DataField>lbl_AuditNewValue</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditOldValue">
+          <DataField>lbl_AuditOldValue</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_AuditReportTitle">
+          <DataField>lbl_AuditReportTitle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_CreationDate">
+          <DataField>lbl_CreationDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Date">
+          <DataField>lbl_Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Description">
+          <DataField>lbl_Description</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_FormulationCode">
+          <DataField>lbl_FormulationCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_GeneratedBy">
+          <DataField>lbl_GeneratedBy</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_HighSpec">
+          <DataField>lbl_HighSpec</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_InfoField">
+          <DataField>lbl_InfoField</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Language">
+          <DataField>lbl_Language</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_LowSpec">
+          <DataField>lbl_LowSpec</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_MngRepTitle">
+          <DataField>lbl_MngRepTitle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ModifiedObject">
+          <DataField>lbl_ModifiedObject</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeAllergen">
+          <DataField>lbl_ObjTypeAllergen</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeAttribute">
+          <DataField>lbl_ObjTypeAttribute</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeChartType">
+          <DataField>lbl_ObjTypeChartType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeCompetence">
+          <DataField>lbl_ObjTypeCompetence</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeContact">
+          <DataField>lbl_ObjTypeContact</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeEquipment">
+          <DataField>lbl_ObjTypeEquipment</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeEventTemplate">
+          <DataField>lbl_ObjTypeEventTemplate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeFrame">
+          <DataField>lbl_ObjTypeFrame</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeInfoFieldDefinition">
+          <DataField>lbl_ObjTypeInfoFieldDefinition</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeInfoProfile">
+          <DataField>lbl_ObjTypeInfoProfile</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeLocation">
+          <DataField>lbl_ObjTypeLocation</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeLocationType">
+          <DataField>lbl_ObjTypeLocationType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeMethod">
+          <DataField>lbl_ObjTypeMethod</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeParameter">
+          <DataField>lbl_ObjTypeParameter</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeParameterProfile">
+          <DataField>lbl_ObjTypeParameterProfile</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeRegulation">
+          <DataField>lbl_ObjTypeRegulation</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeRequestType">
+          <DataField>lbl_ObjTypeRequestType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeSampleType">
+          <DataField>lbl_ObjTypeSampleType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeSchedulerType">
+          <DataField>lbl_ObjTypeSchedulerType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeSpecComponent">
+          <DataField>lbl_ObjTypeSpecComponent</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeSynonim">
+          <DataField>lbl_ObjTypeSynonim</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeUser">
+          <DataField>lbl_ObjTypeUser</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeUserProfile">
+          <DataField>lbl_ObjTypeUserProfile</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeWorkflowTemplate">
+          <DataField>lbl_ObjTypeWorkflowTemplate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ObjTypeWorkSheetType">
+          <DataField>lbl_ObjTypeWorkSheetType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Occurence">
+          <DataField>lbl_Occurence</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_OOSParetoChart">
+          <DataField>lbl_OOSParetoChart</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_OOSParetoChartType">
+          <DataField>lbl_OOSParetoChartType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_OutOfSpecRes">
+          <DataField>lbl_OutOfSpecRes</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_OutOfSpecResAll">
+          <DataField>lbl_OutOfSpecResAll</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Page">
+          <DataField>lbl_Page</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Param">
+          <DataField>lbl_Param</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_PrintingDate">
+          <DataField>lbl_PrintingDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Result">
+          <DataField>lbl_Result</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_ResultValue">
+          <DataField>lbl_ResultValue</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_SampleCard">
+          <DataField>lbl_SampleCard</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_SampleCode">
+          <DataField>lbl_SampleCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_SampleReportTitle">
+          <DataField>lbl_SampleReportTitle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_SamplingDate">
+          <DataField>lbl_SamplingDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_SpecificationCode">
+          <DataField>lbl_SpecificationCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Status">
+          <DataField>lbl_Status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_StOfAnal">
+          <DataField>lbl_StOfAnal</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_StOfAnalAll">
+          <DataField>lbl_StOfAnalAll</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_TimeZone">
+          <DataField>lbl_TimeZone</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_TrendCharts">
+          <DataField>lbl_TrendCharts</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_TrendForParam">
+          <DataField>lbl_TrendForParam</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_UoM">
+          <DataField>lbl_UoM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Value">
+          <DataField>lbl_Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Version">
+          <DataField>lbl_Version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_WorksheetCode">
+          <DataField>lbl_WorksheetCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DS_languages">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@p_UserName">
+            <Value>=Parameters!p_UserName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+SELECT        LANGUAGE AS LANG_ID, SHORT_DESC
+FROM            RndSuite.RndvLang</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="LANG_ID">
+          <DataField>LANG_ID</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SHORT_DESC">
+          <DataField>SHORT_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -2104,7 +2447,7 @@ and spii.II_SHORT_DESC like 'MDD_assigned_PF' ;</CommandText>
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>111.94033mm</Top>
-            <Left>163.08805mm</Left>
+            <Left>162.77055mm</Left>
             <Height>6.08542mm</Height>
             <Width>127.97476mm</Width>
             <ZIndex>7</ZIndex>
@@ -4225,7 +4568,7 @@ False,True
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>214.94741mm</Height>
+        <Height>174.20157mm</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -4332,6 +4675,23 @@ False,True
       <Prompt>p_TimeZoneId</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
+    <ReportParameter Name="p_Lang">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>DS_languages</DataSetName>
+          <ValueField>LANG_ID</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>Locale</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>DS_languages</DataSetName>
+          <ValueField>LANG_ID</ValueField>
+          <LabelField>SHORT_DESC</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -4362,6 +4722,11 @@ False,True
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>1</RowIndex>
           <ParameterName>p_TimeZoneId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>p_Lang</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
