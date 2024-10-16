@@ -1,6 +1,5 @@
 EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
-select 
-DISTINCT
+select DISTINCT
 formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC, spic.DSP_TITLE as IC_DSP_TITLE,
           spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spii.IIVALUE,spiilang.IIVALUE) as IIVALUE, 
@@ -136,7 +135,7 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
         LEFT OUTER JOIN RndSuite.RndvFmMat AS matp1 ON mat.PARENT = matp1.UNIQUE_ID
         LEFT OUTER JOIN RndSuite.RndvFmMat AS matp2 ON matp1.PARENT = matp2.UNIQUE_ID
         LEFT OUTER JOIN RndSuite.RndvFmMat AS matp3 ON matp2.PARENT = matp3.UNIQUE_ID
-        WHERE form.RQ = 543
+        WHERE form.RQ = @p_RQ 
     ) AS subquery
     GROUP BY SP
 ) AS final_results ON sp.SP = final_results.SP

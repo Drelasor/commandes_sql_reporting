@@ -1,7 +1,7 @@
 EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
 select distinct
 formIi.IC, formIi.ICNODE, formIc.IC_SHORT_DESC, formIc.DSP_TITLE as IC_DSP_TITLE,
-          formIi.II, formIi.IINODE, formIi.II_SHORT_DESC, formIi.DSP_TITLE as II_DSP_TITLE, formIi.DSP_TP as II_DSP_TP,ISNULL(formIi.IIVALUE,formiilang.IIVALUE),formIi.POS_X, formIi.POS_Y,
+          formIi.II, formIi.IINODE, formIi.II_SHORT_DESC, formIi.DSP_TITLE as II_DSP_TITLE, formIi.DSP_TP as II_DSP_TP,ISNULL(formIi.IIVALUE,formiilang.IIVALUE) as IIVALUE,formIi.POS_X, formIi.POS_Y,
 	   ppsg_row.PR, ppsg_row.SHORT_DESC as PR_SHORT_DESC, ppsg_row.ORDER_NUMBER as PR_ORDER, ppsg_row.PR_SEQ as PR_SEQ,
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
           e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER,

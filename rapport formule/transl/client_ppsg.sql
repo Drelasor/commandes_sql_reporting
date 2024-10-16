@@ -34,7 +34,7 @@ case when spii.DSP_TP = '@' then
                                                                            and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
                                   
 					 when 'DA_VTP' then
-                           cast((select VALUE_S from RndSuite.RndvSpIiPpsgCell mycells 
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells 
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
@@ -92,7 +92,7 @@ case when spii.DSP_TP = '@' then
                                                                            ) as nvarchar)
                                   when 'Unit' then cast((select UNIT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar)
-                                  when 'ValueS' then cast((select VALUE_S from RndSuite.RndvSpIiPpsgCell mycells 
+                                  when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells 
 								  left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 								  where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = e.COL_LINK) as nvarchar)
@@ -103,13 +103,13 @@ case when spii.DSP_TP = '@' then
                            end 
                      when 'STDPROP_UOM' then ppsg_row.UNIT
                      when 'AU_VTP' then
-                           cast((select VALUE_S from RndSuite.RndvSpIiPpsgCell mycells 
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells 
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
                                   
 					 when 'DA_VTP' then
-                           cast((select VALUE_S from RndSuite.RndvSpIiPpsgCell mycells 
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells 
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
