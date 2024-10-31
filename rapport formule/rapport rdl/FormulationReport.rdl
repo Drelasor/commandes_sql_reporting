@@ -1,16 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
-  <am:AuthoringMetadata>
-    <am:CreatedBy>
-      <am:Name>MSRB</am:Name>
-      <am:Version>15.0.20283.0</am:Version>
-    </am:CreatedBy>
-    <am:UpdatedBy>
-      <am:Name>MSRB</am:Name>
-      <am:Version>15.0.20283.0</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-10-17T08:49:59.0325172Z</am:LastModifiedTimestamp>
-  </am:AuthoringMetadata>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -228,7 +217,7 @@ having  COUNT(*) = nombre_sp</CommandText>
 select DISTINCT
 formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC, spic.DSP_TITLE as IC_DSP_TITLE,
-          spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spii.IIVALUE,spiilang.IIVALUE) as IIVALUE, 
+          spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spiilang.IIVALUE, spii.IIVALUE)as IIVALUE, 
                    spii.POS_X, spii.POS_Y,
 				   ppsg_row.PR, ppsg_row.SHORT_DESC as PR_SHORT_DESC, ppsg_row.ORDER_NUMBER as PR_ORDER, ppsg_row.PR_SEQ as PR_SEQ,
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
@@ -237,29 +226,29 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSIO
 		cast((select max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION)) from RndSuite.RndvSpIiPpsgRow myRow 
 		left join RndSuite.RndvPrLang rowlang on rowlang.PR = myRow.PR and rowlang.LANG_ID = @p_Lang
 		where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           ) as nvarchar) as TITLE,
+                                                                           ) as nvarchar(255)) as TITLE,
 
           case when spii.DSP_TP = '@' then
                  case e.COL_TYPE
                      when 'STDPROP_VTP' then
                            case e.COL_LINK
                                   when 'ShortDescription' then cast((select SHORT_DESC from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           ) as nvarchar)
+                                                                           ) as nvarchar(255))
                                   when 'Description' then cast((select  max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION)) from RndSuite.RndvSpIiPpsgRow myRow 
 								  left join RndSuite.RndvPrLang rowlang on rowlang.PR = myRow.PR and rowlang.LANG_ID = @p_Lang
 								  where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           ) as nvarchar)
+                                                                           ) as nvarchar(255))
                                   when 'Format' then cast((select FORMAT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           ) as nvarchar)
+                                                                           ) as nvarchar(255))
                                   when 'Unit' then cast((select UNIT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           ) as nvarchar)
+                                                                           ) as nvarchar(255))
                                   when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
 								  left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 								   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar(255))
                            else 
                                    cast((select VALUE from RndSuite.RndvSpIiPpsgCell mycells where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar(255))
                                   
                            end 
                      when 'STDPROP_UOM' then ppsg_row.UNIT
@@ -267,13 +256,13 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSIO
                            cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and celllang.LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
+                                                                           and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar(255))
                                   
 					 when 'DA_VTP' then
                            cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
-                                                                           and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
+                                                                           and mycells.LY_SEQ = e.LY_SEQ) as nvarchar(255))
                      else 'COL_TYPE NON RECOGNIZED !'
                  end 
           else null
@@ -297,8 +286,8 @@ CASE
     ELSE 
         mat.QUANTITY * 1
 END AS final_result,
-final_results.sum_final_result
-	
+final_results.sum_final_result,
+(formIi.IIVALUE * sum_final_result) as result	
 		  
 from RndSuite.RndvRq as form
 
@@ -367,7 +356,7 @@ left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID,
 ) AS final_results ON sp.SP = final_results.SP
 
 
-WHERE form.RQ = @p_RQ </CommandText>
+WHERE form.RQ = @p_RQ</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -521,6 +510,10 @@ WHERE form.RQ = @p_RQ </CommandText>
         </Field>
         <Field Name="sum_final_result">
           <DataField>sum_final_result</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="result">
+          <DataField>result</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
         </Field>
       </Fields>
@@ -1267,6 +1260,7 @@ order by iivalue</CommandText>
         </QueryParameters>
         <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
 exec RndSuite.RndprGetRpLabels @p_Lang</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="lbl_Analysis">
@@ -1311,6 +1305,10 @@ exec RndSuite.RndprGetRpLabels @p_Lang</CommandText>
         </Field>
         <Field Name="lbl_Date">
           <DataField>lbl_Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lbl_Decl">
+          <DataField>lbl_Decl</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="lbl_Description">
@@ -1570,6 +1568,137 @@ FROM            RndSuite.RndvLang</CommandText>
         </Field>
         <Field Name="SHORT_DESC">
           <DataField>SHORT_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="Quality_Comments">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@p_UserName">
+            <Value>=Parameters!p_UserName.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@p_Lang">
+            <Value>=Parameters!p_Lang.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@p_RQ">
+            <Value>=Parameters!p_RQ.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+select 
+DISTINCT 
+client.DESCRIPTION,
+          ppsg_rowmat.PR,ppsg_rowmat.ORDER_NUMBER as PR_ORDER, ppsg_rowmat.PR_SEQ as PR_SEQ,
+          e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
+		 cellcli.VALUE_S as client,
+																		 	  
+          case when spiimat.DSP_TP = '@' then
+                 case e.COL_TYPE
+                     when 'STDPROP_VTP' then
+                           case e.COL_LINK
+                                  when 'ShortDescription' then cast((select SHORT_DESC from RndSuite.RndvSpIiPpsgRow myRow where ppsg_rowmat.SP = myRow.SP and ppsg_rowmat.SP_VERSION = myRow.SP_VERSION and ppsg_rowmat.IC = myRow.IC and ppsg_rowmat.ICNODE = myRow.ICNODE and ppsg_rowmat.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Description' then cast((select DESCRIPTION from RndSuite.RndvSpIiPpsgRow myRow where ppsg_rowmat.SP = myRow.SP and ppsg_rowmat.SP_VERSION = myRow.SP_VERSION and ppsg_rowmat.IC = myRow.IC and ppsg_rowmat.ICNODE = myRow.ICNODE and ppsg_rowmat.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Format' then cast((select FORMAT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_rowmat.SP = myRow.SP and ppsg_rowmat.SP_VERSION = myRow.SP_VERSION and ppsg_rowmat.IC = myRow.IC and ppsg_rowmat.ICNODE = myRow.ICNODE and ppsg_rowmat.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'Unit' then cast((select UNIT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_rowmat.SP = myRow.SP and ppsg_rowmat.SP_VERSION = myRow.SP_VERSION and ppsg_rowmat.IC = myRow.IC and ppsg_rowmat.ICNODE = myRow.ICNODE and ppsg_rowmat.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           ) as nvarchar)
+                                  when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells
+								  left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
+								  where ppsg_rowmat.SP = mycells.SP and ppsg_rowmat.SP_VERSION = mycells.SP_VERSION and ppsg_rowmat.IC = mycells.IC and ppsg_rowmat.ICNODE = mycells.ICNODE and ppsg_rowmat.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                           else 
+                                   cast((select VALUE from RndSuite.RndvSpIiPpsgCell mycells where ppsg_rowmat.SP = mycells.SP and ppsg_rowmat.SP_VERSION = mycells.SP_VERSION and ppsg_rowmat.IC = mycells.IC and ppsg_rowmat.ICNODE = mycells.ICNODE and ppsg_rowmat.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           and mycells.COL_TP = e.COL_LINK) as nvarchar)
+                                  
+                           end 
+                     when 'STDPROP_UOM' then ppsg_rowmat.UNIT
+                     when 'AU_VTP' then
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))from RndSuite.RndvSpIiPpsgCell mycells 
+						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
+						   where ppsg_rowmat.SP = mycells.SP and ppsg_rowmat.SP_VERSION = mycells.SP_VERSION and ppsg_rowmat.IC = mycells.IC and ppsg_rowmat.ICNODE = mycells.ICNODE and ppsg_rowmat.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar)
+                                  
+					 when 'DA_VTP' then
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S)) from RndSuite.RndvSpIiPpsgCell mycells 
+						   				left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
+						   where ppsg_rowmat.SP = mycells.SP and ppsg_rowmat.SP_VERSION = mycells.SP_VERSION and ppsg_rowmat.IC = mycells.IC and ppsg_rowmat.ICNODE = mycells.ICNODE and ppsg_rowmat.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_rowmat.PR_SEQ 
+                                                                           and mycells.LY_SEQ = e.LY_SEQ) as nvarchar)
+                     else 'COL_TYPE NON RECOGNIZED !'
+                 end 
+          else null
+          end as PR_VALUE
+         
+         
+  from RndSuite.RndvRq rq 
+
+  --récuperation champ commentaire qualité de la spec PMSF
+  left join RndSuite.RndvFmMat  mat on mat.RQ = rq.RQ 
+  left join RndSuite.RndvSp spmat on spmat.SP = mat.SP and spmat.SP_VERSION = mat.SP_VERSION
+  left join RndSuite.RndvFr fr  on spmat.FR = fr.FR and spmat.FR_VERSION = fr.FR_VERSION and fr.FR_VALUE = 'PMSF'
+  left join RndSuite.RndvSpIc spicmat on spicmat.SP = spmat.SP and spicmat.SP_VERSION = spmat.SP_VERSION 
+  left join RndSuite.RndvSpIi spiimat on spiimat.SP = spmat.SP and spiimat.SP_VERSION = spmat.SP_VERSION and spiimat.IC = spicmat.IC and spiimat.ICNODE = spicmat.ICNODE
+  left join RndSuite.RndvSpIiPpsgRow ppsg_rowmat on spiimat.SP = ppsg_rowmat.SP and spiimat.SP_VERSION = ppsg_rowmat.SP_VERSION and spiimat.IC = ppsg_rowmat.IC and spiimat.ICNODE = ppsg_rowmat.ICNODE and spiimat.IINODE = ppsg_rowmat.IINODE
+  left join RndSuite.RndvSpIiPpsgCell cellmat on ppsg_rowmat.SP = cellmat.SP and cellmat.SP_VERSION = ppsg_rowmat.SP_VERSION and ppsg_rowmat.IC = cellmat.IC and ppsg_rowmat.ICNODE = cellmat.ICNODE and ppsg_rowmat.IINODE = cellmat.IINODE and cellmat.PR_SEQ = ppsg_rowmat.PR_SEQ
+  left join RndSuite.RndvSpIiComp compmat on spiimat.SP = compmat.SP and spiimat.SP_VERSION = compmat.SP_VERSION and spiimat.IC = compmat.IC and spiimat.ICNODE = compmat.ICNODE and spiimat.IINODE = compmat.IINODE
+  left join RndSuite.RndvSpIiLy spiilymat on spiimat.SP = spiilymat.SP and spiimat.SP_VERSION = spiilymat.SP_VERSION and spiimat.ICNODE = spiilymat.ICNODE and spiimat.IINODE = spiilymat.IINODE
+  left join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID, 
+        ltrim(rtrim(substring(COL_TP,1,charindex('@',COL_TP,1)-1))) as COL_TYPE,
+              ltrim(rtrim(substring(COL_TP,charindex('@',COL_TP,1)+1,1000))) as COL_LINK,
+              DISP_TITLE,
+              DISP_WIDTH,
+              COL_HIDDEN,
+              COL_LEN,
+              COL_ALIGNMENT,
+              COL_ALIGNMENT_HEADER,
+              COUNT(SEQ) over (partition by LY, VERSION) as COL_NUMBER
+   from RndSuite.RndvLyDetails
+  where COL_HIDDEN &lt;&gt; 1) e on spiilymat.LY = e.LY and spiilymat.LY_VERSION = e.LY_VERSION
+
+  left join RndSuite.RndvSpIiPpsgCell cellcli on ppsg_rowmat.SP = cellcli.SP and cellcli.SP_VERSION = ppsg_rowmat.SP_VERSION and ppsg_rowmat.IC = cellcli.IC and ppsg_rowmat.ICNODE = cellcli.ICNODE and ppsg_rowmat.IINODE = cellcli.IINODE and cellcli.PR_SEQ = ppsg_rowmat.PR_SEQ and cellcli.PR_SEQ = 2 and cellcli.LY_SEQ = 4 
+
+  -- Récuperation client de la formule 
+  left join RndSuite.RndvRqSp rqsp on rqsp.RQ = rq.RQ
+  left join RndSuite.RndvSp client on client.SP = rqsp.SP and client.SP_VERSION in ( select CASE rqsp.SP_VERSION when -1 then (select TOP 1 first_value(x.SP_VERSION) over (order by x.ACTIVE desc, x.SP_VERSION desc) from RndSuite.RndvSp x where x.SP = client.SP) else rqsp.SP_VERSION end)
+
+
+  where rq.RQ = @p_RQ and spiimat.II_SHORT_DESC = 'Customer_PPSG'</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="DESCRIPTION">
+          <DataField>DESCRIPTION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="client">
+          <DataField>client</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PR">
+          <DataField>PR</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PR_ORDER">
+          <DataField>PR_ORDER</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PR_SEQ">
+          <DataField>PR_SEQ</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PR_HEADER_SEQ">
+          <DataField>PR_HEADER_SEQ</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PR_HEADER_DESC">
+          <DataField>PR_HEADER_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PR_VALUE">
+          <DataField>PR_VALUE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -2270,65 +2399,30 @@ FROM            RndSuite.RndvLang</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>47.88959mm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>80.08517mm</Width>
+                  <Width>80.61442mm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>6.08542mm</Height>
+                  <Height>6mm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox32">
+                        <Textbox Name="PR_VALUE">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Commentaires qualité</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox8</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox33">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
+                                  <Value>=Fields!PR_VALUE.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <rd:DefaultName>PR_VALUE</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2349,20 +2443,57 @@ FROM            RndSuite.RndvLang</CommandText>
             <TablixColumnHierarchy>
               <TablixMembers>
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
-                <TablixMember />
+                <TablixMember>
+                  <Group Name="comment" />
+                  <TablixHeader>
+                    <Size>48.41884mm</Size>
+                    <CellContents>
+                      <Textbox Name="PR_HEADER_DESC">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=Fields!PR_HEADER_DESC.Value</Value>
+                                <Style />
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>PR_HEADER_DESC</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>GLOBAL_DATA</DataSetName>
+            <DataSetName>Quality_Comments</DataSetName>
             <Top>118.8195mm</Top>
             <Left>162.5588mm</Left>
-            <Height>6.08542mm</Height>
-            <Width>127.97476mm</Width>
+            <Height>6mm</Height>
+            <Width>129.03326mm</Width>
             <ZIndex>6</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2582,11 +2713,11 @@ FROM            RndSuite.RndvLang</CommandText>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>9.70417mm</Height>
+                  <Height>10.23333mm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox60">
+                        <Textbox Name="Textbox78">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2622,14 +2753,14 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox66">
+                        <Textbox Name="Textbox79">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Déclaration eg</Value>
+                                  <Value>Déclaration EG</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>White</Color>
@@ -2658,7 +2789,7 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox61">
+                        <Textbox Name="Textbox80">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2694,7 +2825,7 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox62">
+                        <Textbox Name="Textbox81">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2730,7 +2861,7 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox63">
+                        <Textbox Name="Textbox87">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2766,7 +2897,7 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox64">
+                        <Textbox Name="Textbox88">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2802,7 +2933,7 @@ FROM            RndSuite.RndvLang</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox45">
+                        <Textbox Name="Textbox51">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2839,7 +2970,7 @@ FROM            RndSuite.RndvLang</CommandText>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>10.49792mm</Height>
+                  <Height>11.82084mm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2847,12 +2978,12 @@ FROM            RndSuite.RndvLang</CommandText>
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>4.6952cm</Width>
+                                <Width>46.952mm</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.5249cm</Height>
+                                <Height>5.91042mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2889,7 +3020,7 @@ FROM            RndSuite.RndvLang</CommandText>
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.5249cm</Height>
+                                <Height>5.91042mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -2968,6 +3099,11 @@ True, True)</Hidden>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
                           </Style>
                         </Tablix>
                       </CellContents>
@@ -2983,7 +3119,7 @@ True, True)</Hidden>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.49792mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3062,7 +3198,7 @@ True, True)</Hidden>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.4979mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3140,7 +3276,7 @@ True, True)</Hidden>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.49792mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3156,7 +3292,9 @@ IsNothing(Fields!PR_VALUE.Value), "",
    Fields!PR_VALUE.Value = "100", "",
     Fields!PR_VALUE.Value= "0", "interdit"&amp;" "&amp; Fields!PR_HEADER_DESC.Value &amp;" = 0" ,
     Fields!PR_VALUE.Value&gt; 0 And Fields!PR_VALUE.Value &lt; 100, 
-        IIf(Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &gt; Fields!PR_VALUE.Value, "Interdit "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &amp; " &gt; " &amp; Fields!PR_VALUE.Value,  "Autorisé "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!sum_final_result.Value * CDbl(Replace(Fields!incorporation.Value,".",",")) &amp; " &lt; " &amp; Fields!PR_VALUE.Value)
+        IIf(Fields!result.Value &gt; Fields!PR_VALUE.Value, "Interdit "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!result.Value &amp; " &gt; " &amp; Fields!PR_VALUE.Value,  
+
+"Autorisé "&amp; Fields!PR_HEADER_DESC.Value &amp;" "&amp; Fields!result.Value &amp; " &lt; " &amp; Fields!PR_VALUE.Value)
 )</Value>
                                                 <Style />
                                               </TextRun>
@@ -3285,7 +3423,7 @@ True, True
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.49792mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3299,7 +3437,6 @@ True, True
                                                 <Value>=Switch(Fields!PR_HEADER_SEQ.Value
 =3 and Fields!PR_VALUE.Value = "true" , Fields!TITLE.Value ,
 True, "")</Value>
-                                                <MarkupType>HTML</MarkupType>
                                                 <Style>
                                                   <FontFamily>Arial</FontFamily>
                                                   <FontWeight>=IIF(Fields!PR_HEADER_DESC.Value = "Présent" And Fields!PR_VALUE.Value = "true", "Bold", "Normal")</FontWeight>
@@ -3387,7 +3524,7 @@ True, True
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.49792mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3492,7 +3629,7 @@ True, True
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>10.49782mm</Height>
+                                <Height>11.82084mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -3593,6 +3730,9 @@ True, True
             <TablixRowHierarchy>
               <TablixMembers>
                 <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
                   <Group Name="Détails">
                     <GroupExpressions>
                       <GroupExpression>=Fields!SP.Value</GroupExpression>
@@ -3605,7 +3745,6 @@ True, True
                   </SortExpressions>
                   <TablixMembers>
                     <TablixMember />
-                    <TablixMember />
                   </TablixMembers>
                   <Visibility>
                     <Hidden>=Fields!QUANTITY.Value = 1000</Hidden>
@@ -3617,7 +3756,7 @@ True, True
             <DataSetName>Auth_Country</DataSetName>
             <Top>179.18279mm</Top>
             <Left>5.81207mm</Left>
-            <Height>20.20209mm</Height>
+            <Height>22.05417mm</Height>
             <Width>380.19124mm</Width>
             <ZIndex>9</ZIndex>
             <Style>
@@ -3817,7 +3956,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>modap</DataSetName>
             <Top>161.31645mm</Top>
-            <Left>3.14326mm</Left>
+            <Left>12.66826mm</Left>
             <Height>8.99584mm</Height>
             <Width>199.11231mm</Width>
             <ZIndex>10</ZIndex>
@@ -4682,7 +4821,7 @@ False,True
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>202.82446mm</Height>
+        <Height>212.08488mm</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -4696,27 +4835,27 @@ False,True
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="ExecutionTime">
+            <Textbox Name="Textbox50">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Globals!ExecutionTime</Value>
+                      <Value>=First(Fields!DESCRIPTION.Value, "GLOBAL_DATA")</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>ExecutionTime</rd:DefaultName>
-              <Top>5.08mm</Top>
-              <Left>259.29166mm</Left>
-              <Height>6.35mm</Height>
-              <Width>50.8mm</Width>
+              <rd:DefaultName>Textbox47</rd:DefaultName>
+              <Top>1.5628cm</Top>
+              <Left>18.25464cm</Left>
+              <Height>0.7426cm</Height>
+              <Width>2.84312cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4734,8 +4873,8 @@ False,True
             </Border>
           </Style>
         </PageFooter>
-        <PageHeight>29.7cm</PageHeight>
-        <PageWidth>21cm</PageWidth>
+        <PageHeight>21cm</PageHeight>
+        <PageWidth>29.7cm</PageWidth>
         <LeftMargin>2cm</LeftMargin>
         <RightMargin>2cm</RightMargin>
         <TopMargin>2cm</TopMargin>
@@ -4846,6 +4985,6 @@ False,True
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportServerUrl>https://cesamseedc/ReportServer</rd:ReportServerUrl>
+  <rd:ReportServerUrl>https://rdnlopcenter.eurogerm.com/ReportServer</rd:ReportServerUrl>
   <rd:ReportID>ad36e317-fbfb-4674-8645-93cb2cd7de9e</rd:ReportID>
 </Report>
