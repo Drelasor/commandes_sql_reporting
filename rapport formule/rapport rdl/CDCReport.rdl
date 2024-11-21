@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-11-04T09:58:13.9087600Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-11-21T13:20:12.4635412Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -226,10 +226,10 @@ having  COUNT(*) = nombre_sp</CommandText>
         </QueryParameters>
         <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
 select DISTINCT
-formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
+formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC, spic.DSP_TITLE as IC_DSP_TITLE,
           spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spiilang.IIVALUE, spii.IIVALUE)as IIVALUE, 
-                   spii.POS_X, spii.POS_Y,
+                   spii.POS_X, spii.POS_Y,spii.IDENTIFIER,
 				   ppsg_row.PR, ppsg_row.SHORT_DESC as PR_SHORT_DESC, ppsg_row.ORDER_NUMBER as PR_ORDER, ppsg_row.PR_SEQ as PR_SEQ,
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
           e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER, 
@@ -379,6 +379,10 @@ WHERE form.RQ = @p_RQ</CommandText>
           <DataField>SP_VALUE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DESCRIPTION">
+          <DataField>DESCRIPTION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="UNIQUE_ID">
           <DataField>UNIQUE_ID</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
@@ -438,6 +442,10 @@ WHERE form.RQ = @p_RQ</CommandText>
         <Field Name="POS_Y">
           <DataField>POS_Y</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="IDENTIFIER">
+          <DataField>IDENTIFIER</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="PR">
           <DataField>PR</DataField>
@@ -1858,7 +1866,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>25.89742mm</Top>
-            <Left>12.40367mm</Left>
+            <Left>21.74034mm</Left>
             <Height>6.08542mm</Height>
             <Width>125.0125mm</Width>
             <Style>
@@ -1968,7 +1976,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>44.13603mm</Top>
-            <Left>12.40367mm</Left>
+            <Left>21.74034mm</Left>
             <Height>6.08542mm</Height>
             <Width>125.01252mm</Width>
             <ZIndex>1</ZIndex>
@@ -2071,7 +2079,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>25.89741mm</Top>
-            <Left>216.40582mm</Left>
+            <Left>225.74249mm</Left>
             <Height>6.08542mm</Height>
             <Width>116.67284mm</Width>
             <ZIndex>2</ZIndex>
@@ -2174,7 +2182,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Auth_Country</DataSetName>
             <Top>33.71144mm</Top>
-            <Left>216.40582mm</Left>
+            <Left>225.74249mm</Left>
             <Height>6.08542mm</Height>
             <Width>116.67284mm</Width>
             <ZIndex>3</ZIndex>
@@ -2285,7 +2293,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>4.23334mm</Top>
-            <Left>12.93283mm</Left>
+            <Left>22.2695mm</Left>
             <Height>6.08542mm</Height>
             <Width>124.48334mm</Width>
             <ZIndex>4</ZIndex>
@@ -2396,7 +2404,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>79.24664mm</Top>
-            <Left>12.82699mm</Left>
+            <Left>22.16366mm</Left>
             <Height>6.08542mm</Height>
             <Width>117.9746mm</Width>
             <ZIndex>5</ZIndex>
@@ -2498,7 +2506,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Quality_Comments</DataSetName>
             <Top>118.8195mm</Top>
-            <Left>162.5588mm</Left>
+            <Left>171.89547mm</Left>
             <Height>6mm</Height>
             <Width>129.03326mm</Width>
             <ZIndex>6</ZIndex>
@@ -2605,7 +2613,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>DLUO</DataSetName>
             <Top>129.78204mm</Top>
-            <Left>12.93283mm</Left>
+            <Left>22.2695mm</Left>
             <Height>6.08542mm</Height>
             <Width>40.3604mm</Width>
             <ZIndex>7</ZIndex>
@@ -2686,7 +2694,7 @@ client.DESCRIPTION,
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>14.25575mm</Top>
-            <Left>12.40367mm</Left>
+            <Left>21.74034mm</Left>
             <Height>7.6588mm</Height>
             <Width>373.59972mm</Width>
             <ZIndex>8</ZIndex>
@@ -2719,7 +2727,19 @@ client.DESCRIPTION,
                   <Width>56.10223mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>35.93609mm</Width>
+                  <Width>35.93617mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>42.72708mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>30.29167mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>25mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>34.34859mm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -2752,7 +2772,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2788,7 +2808,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2824,7 +2844,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2860,7 +2880,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2896,7 +2916,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2915,7 +2935,7 @@ client.DESCRIPTION,
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Allergènes cc fournisseur</Value>
+                                  <Value>Allergènes cc </Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>White</Color>
@@ -2932,7 +2952,151 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Origine végétale</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Origine géographique</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox14">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>OGM / Type</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox14</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox20">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Kasher</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -2968,7 +3132,7 @@ client.DESCRIPTION,
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>Teal</BackgroundColor>
+                            <BackgroundColor>#3c3e36</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -3496,7 +3660,9 @@ True, "")</Value>
                                 <Visibility>
                                   <Hidden>=Switch(
 IsNothing(Fields!PR_VALUE.Value), True,
+
 Fields!II_SHORT_DESC.Value = "Allergens" And Fields!PR_HEADER_SEQ.Value = 3 and Fields!PR_VALUE.Value = "false", True, 
+
 Fields!II_SHORT_DESC.Value = "Allergens" And Fields!PR_HEADER_SEQ.Value = 3 and Fields!PR_VALUE.Value = "true", False, 
 
 True, True
@@ -3631,11 +3797,349 @@ True, True
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Tablix Name="Tablix13">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>3.59362cm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>1.18208cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox43">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value />
+                                                <Style />
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox43</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix9">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>4.27271cm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>1.18208cm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="IIVALUE1">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!IIVALUE.Value</Value>
+                                                <MarkupType>HTML</MarkupType>
+                                                <Style />
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>IIVALUE1</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <BottomBorder>
+                                            <Color>Black</Color>
+                                            <Style>Solid</Style>
+                                            <Width>1pt</Width>
+                                          </BottomBorder>
+                                          <VerticalAlign>Top</VerticalAlign>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="Details3">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <Visibility>
+                                  <Hidden>=Switch(
+IsNothing(Fields!IIVALUE.Value), True,
+Fields!IC_SHORT_DESC.Value = "ComponentList" and Fields!II_SHORT_DESC.Value = "Country of" , False,
+True,True)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>Auth_Country</DataSetName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix3">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>30.2917mm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>11.8208mm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="PR_VALUE1">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!PR_VALUE.Value &amp;" "&amp;Fields!TITLE.Value</Value>
+                                                <Style>
+                                                  <FontFamily>Arial</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>PR_VALUE1</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="Details">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!TITLE.Value</GroupExpression>
+                                    <GroupExpression>=Fields!PR_VALUE.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <Visibility>
+                                  <Hidden>=Switch(
+
+Fields!II_SHORT_DESC.Value = "GMO" And Fields!PR_HEADER_SEQ.Value = 3 And Fields!PR_VALUE.Value = "Oui", False,
+
+
+IsNothing(Fields!PR_VALUE.Value), True,
+
+True, True
+)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>Auth_Country</DataSetName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix4">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>25mm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>11.8208mm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="IIVALUE">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!IIVALUE.Value</Value>
+                                                <MarkupType>HTML</MarkupType>
+                                                <Style>
+                                                  <FontFamily>Arial</FontFamily>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Center</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>IIVALUE</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <VerticalAlign>Top</VerticalAlign>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="Details1">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <Visibility>
+                                  <Hidden>=Switch(
+
+IsNothing(Fields!IIVALUE.Value), True,
+
+Fields!II_SHORT_DESC.Value = "Kosher Status", False, 
+True, True
+)</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>Auth_Country</DataSetName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Tablix Name="Tablix34">
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>35.93617mm</Width>
+                                <Width>34.34859mm</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -3652,7 +4156,9 @@ True, True
                                             <TextRuns>
                                               <TextRun>
                                                 <Value>=IIf(Fields!PR_HEADER_SEQ.Value = 18, Fields!PR_VALUE.Value, "")</Value>
-                                                <Style />
+                                                <Style>
+                                                  <FontFamily>Arial</FontFamily>
+                                                </Style>
                                               </TextRun>
                                             </TextRuns>
                                             <Style>
@@ -3736,6 +4242,10 @@ True, True
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -3765,10 +4275,10 @@ True, True
             </TablixRowHierarchy>
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
-            <Top>179.18279mm</Top>
-            <Left>5.81207mm</Left>
+            <Top>260.40988mm</Top>
+            <Left>0mm</Left>
             <Height>22.05417mm</Height>
-            <Width>380.19124mm</Width>
+            <Width>512.55866mm</Width>
             <ZIndex>9</ZIndex>
             <Style>
               <Border>
@@ -3967,7 +4477,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>modap</DataSetName>
             <Top>161.31645mm</Top>
-            <Left>12.66826mm</Left>
+            <Left>22.00493mm</Left>
             <Height>8.99584mm</Height>
             <Width>199.11231mm</Width>
             <ZIndex>10</ZIndex>
@@ -4085,7 +4595,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Ligne_Production</DataSetName>
             <Top>140.27719mm</Top>
-            <Left>12.61533mm</Left>
+            <Left>21.952mm</Left>
             <Height>6.08542mm</Height>
             <Width>87.03952mm</Width>
             <ZIndex>11</ZIndex>
@@ -4261,7 +4771,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>54.3983mm</Top>
-            <Left>12.19199mm</Left>
+            <Left>21.52866mm</Left>
             <Height>7.67292mm</Height>
             <Width>293.41467mm</Width>
             <ZIndex>12</ZIndex>
@@ -4375,7 +4885,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>86.54914mm</Top>
-            <Left>162.5588mm</Left>
+            <Left>171.89547mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.50401mm</Width>
             <ZIndex>13</ZIndex>
@@ -4487,7 +4997,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>97.02662mm</Top>
-            <Left>162.77043mm</Left>
+            <Left>172.1071mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.29238mm</Width>
             <ZIndex>14</ZIndex>
@@ -4599,7 +5109,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>107.63643mm</Top>
-            <Left>162.5588mm</Left>
+            <Left>171.89547mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.50401mm</Width>
             <ZIndex>15</ZIndex>
@@ -4710,7 +5220,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>66.87293mm</Top>
-            <Left>12.40367mm</Left>
+            <Left>21.74034mm</Left>
             <Height>6.08542mm</Height>
             <Width>293.20299mm</Width>
             <ZIndex>16</ZIndex>
@@ -4821,7 +5331,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Client_ppsg</DataSetName>
             <Top>34.5934mm</Top>
-            <Left>12.61533mm</Left>
+            <Left>21.952mm</Left>
             <Height>6.08542mm</Height>
             <Width>124.80084mm</Width>
             <ZIndex>17</ZIndex>
@@ -4831,15 +5341,729 @@ False,True
               </Border>
             </Style>
           </Tablix>
+          <Tablix Name="Tablix27">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>55.77417mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>143.07357mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>11.37709mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Etiquetage produit dangereux</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix32">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>143.07357mm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>5.68854mm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="DESCRIPTION3">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!DESCRIPTION.Value</Value>
+                                                <Style>
+                                                  <FontWeight>Bold</FontWeight>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>5.68854mm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox71">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!IIVALUE.Value</Value>
+                                                <MarkupType>HTML</MarkupType>
+                                                <Style />
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox69</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="Description2">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <SortExpressions>
+                                  <SortExpression>
+                                    <Value>=Fields!DESCRIPTION.Value</Value>
+                                  </SortExpression>
+                                </SortExpressions>
+                                <TablixMembers>
+                                  <TablixMember>
+                                    <KeepWithGroup>After</KeepWithGroup>
+                                  </TablixMember>
+                                  <TablixMember>
+                                    <Group Name="Détails16">
+                                      <GroupExpressions>
+                                        <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                                      </GroupExpressions>
+                                    </Group>
+                                    <TablixMembers>
+                                      <TablixMember />
+                                    </TablixMembers>
+                                    <Visibility>
+                                      <Hidden>=Switch(
+IsNothing(Fields!IIVALUE.Value), True, 
+Fields!IC_SHORT_DESC.Value = "Security" And Fields!II_SHORT_DESC.Value = "Text_rich", False,
+True, True)</Hidden>
+                                    </Visibility>
+                                  </TablixMember>
+                                </TablixMembers>
+                                <Visibility>
+                                  <Hidden>=Fields!QUANTITY.Value = 1000</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>modap</DataSetName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>Auth_Country</DataSetName>
+            <Top>178.53827mm</Top>
+            <Left>22.2695mm</Left>
+            <Height>11.37709mm</Height>
+            <Width>198.84774mm</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix28">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>55.77417mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>8.99584mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox41">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Commentaires réglementaires</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>modap</DataSetName>
+            <Top>196.26536mm</Top>
+            <Left>22.2695mm</Left>
+            <Height>8.99584mm</Height>
+            <Width>55.77417mm</Width>
+            <ZIndex>19</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix29">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>55.77417mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>8.99584mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox42">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Contaminants / Microbiologie</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>modap</DataSetName>
+            <Top>213.99245mm</Top>
+            <Left>22.00493mm</Left>
+            <Height>8.99584mm</Height>
+            <Width>55.77417mm</Width>
+            <ZIndex>20</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix43">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.01921cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DESCRIPTION">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <MarkupType>HTML</MarkupType>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="halal">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                      <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                      <GroupExpression>=Fields!IDENTIFIER.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                  <Visibility>
+                    <Hidden>=Switch(
+IsNothing(Fields!IIVALUE.Value), True,
+Fields!IDENTIFIER.Value = "List_Halal" and Fields!IIVALUE.Value = "Oui", False,
+True,True
+)</Hidden>
+                  </Visibility>
+                </TablixMember>
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>2.5cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox126">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Halal</Value>
+                                <Style>
+                                  <FontFamily>Arial</FontFamily>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox125</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>Auth_Country</DataSetName>
+            <Top>23.33321cm</Top>
+            <Left>2.22695cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.51921cm</Width>
+            <ZIndex>21</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix44">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.08271cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DESCRIPTION5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Vegan">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                      <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                      <GroupExpression>=Fields!IDENTIFIER.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                  <Visibility>
+                    <Hidden>=Switch(
+Fields!IDENTIFIER.Value = "Vegan_List_3" And Fields!IIVALUE.Value = "Oui" , False,
+IsNothing(Fields!PR_VALUE.Value), True, 
+True, True)</Hidden>
+                  </Visibility>
+                </TablixMember>
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>2.5cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox127">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Vegan</Value>
+                                <Style>
+                                  <FontFamily>Arial</FontFamily>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox125</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>Auth_Country</DataSetName>
+            <Top>24.10254cm</Top>
+            <Left>2.1952cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.58271cm</Width>
+            <ZIndex>22</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix45">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.08271cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DESCRIPTION6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Végétarien" />
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                  <Visibility>
+                    <Hidden>=Switch(Fields!IC_SHORT_DESC.Value = "Certifications &amp; Schemes" And Fields!IDENTIFIER.Value = "Vegetarian_List_3" And Fields!IIVALUE.Value = "Oui", False, IsNothing(Fields!PR_VALUE.Value), True, True, True)</Hidden>
+                  </Visibility>
+                </TablixMember>
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <TablixHeader>
+                    <Size>2.46825cm</Size>
+                    <CellContents>
+                      <Textbox Name="Textbox128">
+                        <CanGrow>true</CanGrow>
+                        <KeepTogether>true</KeepTogether>
+                        <Paragraphs>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>Végétarien</Value>
+                                <Style>
+                                  <FontFamily>Arial</FontFamily>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style />
+                          </Paragraph>
+                        </Paragraphs>
+                        <rd:DefaultName>Textbox125</rd:DefaultName>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                          <PaddingBottom>2pt</PaddingBottom>
+                        </Style>
+                      </Textbox>
+                    </CellContents>
+                  </TablixHeader>
+                  <TablixMembers>
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <KeepTogether>true</KeepTogether>
+            <DataSetName>Auth_Country</DataSetName>
+            <Top>24.84365cm</Top>
+            <Left>2.1952cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.55096cm</Width>
+            <ZIndex>23</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
         </ReportItems>
-        <Height>212.08488mm</Height>
+        <Height>306.54113mm</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>435.85341mm</Width>
+      <Width>527.7074mm</Width>
       <Page>
         <PageFooter>
           <Height>38.6821mm</Height>
@@ -4864,7 +6088,7 @@ False,True
               </Paragraphs>
               <rd:DefaultName>Textbox47</rd:DefaultName>
               <Top>1.5628cm</Top>
-              <Left>18.25464cm</Left>
+              <Left>19.18831cm</Left>
               <Height>0.7426cm</Height>
               <Width>2.84312cm</Width>
               <Style>
