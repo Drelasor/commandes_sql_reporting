@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2024-11-21T13:20:12.4635412Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2024-12-02T09:28:34.6216952Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -228,13 +228,22 @@ having  COUNT(*) = nombre_sp</CommandText>
 select DISTINCT
 formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP, spii.SP_VERSION,
        spii.IC, spii.ICNODE, spic.IC_SHORT_DESC, spic.DSP_TITLE as IC_DSP_TITLE,
-          spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spiilang.IIVALUE, spii.IIVALUE)as IIVALUE, 
+          spii.II, spii.IINODE, spii.II_SHORT_DESC, spii.DSP_TITLE as II_DSP_TITLE, spii.DSP_TP as II_DSP_TP, ISNULL(spiilang.IIVALUE, spii.IIVALUE_MAIN)as IIVALUE, 
                    spii.POS_X, spii.POS_Y,spii.IDENTIFIER,
 				   ppsg_row.PR, ppsg_row.SHORT_DESC as PR_SHORT_DESC, ppsg_row.ORDER_NUMBER as PR_ORDER, ppsg_row.PR_SEQ as PR_SEQ,
           e.LY_SEQ as PR_HEADER_SEQ, e.DISP_TITLE as PR_HEADER_DESC,
           e.DISP_WIDTH as PR_HEADER_WIDTH, e.COL_ALIGNMENT, e.COL_ALIGNMENT_HEADER, 
 
-		cast((select max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION)) from RndSuite.RndvSpIiPpsgRow myRow 
+
+		(select  ii.IIVALUE from RndSuite.RndvSpIi ii
+  WHERE ii.SP = spii.SP AND ii.SP_VERSION = spii.SP_VERSION and ii.II_SHORT_DESC  = 'ERP Designation'
+) AS REF_ERP,
+
+		(select  ii.IIVALUE from RndSuite.RndvSpIi ii
+ WHERE ii.SP = spii.SP AND ii.SP_VERSION = spii.SP_VERSION and ii.II_SHORT_DESC  = 'ERP code'
+) AS CODE_ERP,
+
+		cast((select max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION_MAIN)) from RndSuite.RndvSpIiPpsgRow myRow 
 		left join RndSuite.RndvPrLang rowlang on rowlang.PR = myRow.PR and rowlang.LANG_ID = @p_Lang
 		where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar(255)) as TITLE,
@@ -245,7 +254,7 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP,
                            case e.COL_LINK
                                   when 'ShortDescription' then cast((select SHORT_DESC from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar(255))
-                                  when 'Description' then cast((select  max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION)) from RndSuite.RndvSpIiPpsgRow myRow 
+                                  when 'Description' then cast((select  max(ISNULL(rowlang.DESCRIPTION,myRow.DESCRIPTION_MAIN)) from RndSuite.RndvSpIiPpsgRow myRow 
 								  left join RndSuite.RndvPrLang rowlang on rowlang.PR = myRow.PR and rowlang.LANG_ID = @p_Lang
 								  where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar(255))
@@ -253,7 +262,7 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP,
                                                                            ) as nvarchar(255))
                                   when 'Unit' then cast((select UNIT from RndSuite.RndvSpIiPpsgRow myRow where ppsg_row.SP = myRow.SP and ppsg_row.SP_VERSION = myRow.SP_VERSION and ppsg_row.IC = myRow.IC and ppsg_row.ICNODE = myRow.ICNODE and ppsg_row.IINODE = myRow.IINODE and myRow.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            ) as nvarchar(255))
-                                  when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
+                                  when 'ValueS' then cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S_MAIN))  from RndSuite.RndvSpIiPpsgCell mycells
 								  left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 								   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = e.COL_LINK) as nvarchar(255))
@@ -264,13 +273,13 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP,
                            end 
                      when 'STDPROP_UOM' then ppsg_row.UNIT
                      when 'AU_VTP' then
-                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S_MAIN))  from RndSuite.RndvSpIiPpsgCell mycells
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and celllang.LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.COL_TP = concat('AU_',e.COL_LINK)) as nvarchar(255))
                                   
 					 when 'DA_VTP' then
-                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S))  from RndSuite.RndvSpIiPpsgCell mycells
+                           cast((select max(ISNULL(celllang.VALUE_S,mycells.VALUE_S_MAIN))  from RndSuite.RndvSpIiPpsgCell mycells
 						   left join RndSuite.RndvSpIiPpsgCellLang celllang on celllang.SP = mycells.SP and celllang.SP_VERSION = mycells.SP_VERSION and celllang.IC = mycells.IC and celllang.ICNODE = mycells.ICNODE and celllang.IINODE = mycells.IINODE and celllang.PR_SEQ = mycells.PR_SEQ and LANG_ID = @p_Lang
 						   where ppsg_row.SP = mycells.SP and ppsg_row.SP_VERSION = mycells.SP_VERSION and ppsg_row.IC = mycells.IC and ppsg_row.ICNODE = mycells.ICNODE and ppsg_row.IINODE = mycells.IINODE and mycells.PR_SEQ = ppsg_row.PR_SEQ 
                                                                            and mycells.LY_SEQ = e.LY_SEQ) as nvarchar(255))
@@ -278,7 +287,7 @@ formIi.IIVALUE as incorporation,sp.SP_VALUE,sp.DESCRIPTION,sp.UNIQUE_ID,spii.SP,
                  end 
           else null
           end as PR_VALUE, 
-		  comp.CP, ISNULL(complang.DESCRIPTION,comp.DESCRIPTION) as CP_DESC,comp.QUANTITY as comp_QUANTITY, comp.SHORT_DESC as CP_SHORT_DESC,  mat.QUANTITY,matp1.QUANTITY as quantity_parent1, matp2.QUANTITY as quantity_parent2, matp3.QUANTITY as quantity_parent3,	
+		  comp.CP, ISNULL(complang.DESCRIPTION,comp.DESCRIPTION) as CP_DESC,comp.QUANTITY as comp_QUANTITY, comp.SHORT_DESC as CP_SHORT_DESC,au.SHORT_DESC as AU_SHORT_DESC,compau.VALUE as AU_VALUE,mat.QUANTITY,matp1.QUANTITY as quantity_parent1, matp2.QUANTITY as quantity_parent2, matp3.QUANTITY as quantity_parent3,	
 
 		
 CASE
@@ -319,6 +328,8 @@ left outer join RndSuite.RndvSpIiPpsgRow as ppsg_row on ppsg_row.SP = spii.SP an
 left outer join RndSuite.RndvSpIiPpsgCell cell on ppsg_row.SP = cell.SP and ppsg_row.SP_VERSION = cell.SP_VERSION and ppsg_row.IC = cell.IC and ppsg_row.ICNODE = cell.ICNODE and ppsg_row.IINODE = cell.IINODE and cell.PR_SEQ = ppsg_row.PR_SEQ 
 left outer join RndSuite.RndvSpIiComp comp on spii.SP = comp.SP and spii.SP_VERSION = comp.SP_VERSION and spii.IC = comp.IC and spii.ICNODE = comp.ICNODE and spii.IINODE = comp.IINODE
 left outer join RndSuite.RndvSpIiCompLang complang on complang.UNIQUE_ID = comp.UNIQUE_ID and complang.LANG_ID = @p_Lang
+left outer join RndSuite.RndvSpIiCompAu compau on compau.SP = comp.SP and compau.SP_VERSION = comp.SP_VERSION and comp.UNIQUE_ID = compau.UNIQUE_ID 
+left outer join RndSuite.RndvAu au on au.AU = compau.AU and au.VERSION in (select case compau.AU_VERSION when -1 then (select TOP  1 first_value(x.VERSION) over (order by  x.VERSION DESC) from RndSuite.RndvAu x where x.AU = compau.AU) else compau.AU_VERSION end)
 left outer join RndSuite.RndvSpIiLy spiily on spii.SP = spiily.SP and spii.SP_VERSION = spiily.SP_VERSION and spii.ICNODE = spiily.ICNODE and spii.IINODE = spiily.IINODE
 left outer join (select LY, VERSION as LY_VERSION, SEQ as LY_SEQ, COL_ID, 
         ltrim(rtrim(substring(COL_TP,1,charindex('@',COL_TP,1)-1))) as COL_TYPE,
@@ -483,6 +494,14 @@ WHERE form.RQ = @p_RQ</CommandText>
           <DataField>COL_ALIGNMENT_HEADER</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="REF_ERP">
+          <DataField>REF_ERP</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CODE_ERP">
+          <DataField>CODE_ERP</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="TITLE">
           <DataField>TITLE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -505,6 +524,14 @@ WHERE form.RQ = @p_RQ</CommandText>
         </Field>
         <Field Name="CP_SHORT_DESC">
           <DataField>CP_SHORT_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AU_SHORT_DESC">
+          <DataField>AU_SHORT_DESC</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AU_VALUE">
+          <DataField>AU_VALUE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="QUANTITY">
@@ -1722,6 +1749,27 @@ client.DESCRIPTION,
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="TestLang">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@p_UserName">
+            <Value>=Parameters!p_UserName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>EXEC [RndSuite].[RndprSetConnectionForReport] @p_UserName;
+
+select ISNULL(spiilang.IIVALUE, spii.IIVALUE_MAIN)as IIVALUE from RndSuite.RndvSpIi spii
+left join RndSuite.RndvSpIiLang as spiilang on spii.SP = spiilang.SP and spii.SP_VERSION = spiilang.SP_VERSION and spiilang.IINODE = spii.IINODE and spiilang.IC = spii.IC and spiilang.ICNODE = spii.ICNODE and spiilang.LANG_ID = 1</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="IIVALUE">
+          <DataField>IIVALUE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -1866,7 +1914,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>25.89742mm</Top>
-            <Left>21.74034mm</Left>
+            <Left>22.05784mm</Left>
             <Height>6.08542mm</Height>
             <Width>125.0125mm</Width>
             <Style>
@@ -1976,7 +2024,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>44.13603mm</Top>
-            <Left>21.74034mm</Left>
+            <Left>22.05784mm</Left>
             <Height>6.08542mm</Height>
             <Width>125.01252mm</Width>
             <ZIndex>1</ZIndex>
@@ -2079,7 +2127,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>25.89741mm</Top>
-            <Left>225.74249mm</Left>
+            <Left>226.05999mm</Left>
             <Height>6.08542mm</Height>
             <Width>116.67284mm</Width>
             <ZIndex>2</ZIndex>
@@ -2182,7 +2230,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Auth_Country</DataSetName>
             <Top>33.71144mm</Top>
-            <Left>225.74249mm</Left>
+            <Left>226.05999mm</Left>
             <Height>6.08542mm</Height>
             <Width>116.67284mm</Width>
             <ZIndex>3</ZIndex>
@@ -2293,7 +2341,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>4.23334mm</Top>
-            <Left>22.2695mm</Left>
+            <Left>22.587mm</Left>
             <Height>6.08542mm</Height>
             <Width>124.48334mm</Width>
             <ZIndex>4</ZIndex>
@@ -2404,7 +2452,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>79.24664mm</Top>
-            <Left>22.16366mm</Left>
+            <Left>22.48116mm</Left>
             <Height>6.08542mm</Height>
             <Width>117.9746mm</Width>
             <ZIndex>5</ZIndex>
@@ -2506,7 +2554,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>Quality_Comments</DataSetName>
             <Top>118.8195mm</Top>
-            <Left>171.89547mm</Left>
+            <Left>172.21297mm</Left>
             <Height>6mm</Height>
             <Width>129.03326mm</Width>
             <ZIndex>6</ZIndex>
@@ -2613,7 +2661,7 @@ client.DESCRIPTION,
             </TablixRowHierarchy>
             <DataSetName>DLUO</DataSetName>
             <Top>129.78204mm</Top>
-            <Left>22.2695mm</Left>
+            <Left>22.587mm</Left>
             <Height>6.08542mm</Height>
             <Width>40.3604mm</Width>
             <ZIndex>7</ZIndex>
@@ -2694,7 +2742,7 @@ client.DESCRIPTION,
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>14.25575mm</Top>
-            <Left>21.74034mm</Left>
+            <Left>22.05784mm</Left>
             <Height>7.6588mm</Height>
             <Width>373.59972mm</Width>
             <ZIndex>8</ZIndex>
@@ -3612,6 +3660,7 @@ True, True
                                                 <Value>=Switch(Fields!PR_HEADER_SEQ.Value
 =3 and Fields!PR_VALUE.Value = "true" , Fields!TITLE.Value ,
 True, "")</Value>
+                                                <MarkupType>HTML</MarkupType>
                                                 <Style>
                                                   <FontFamily>Arial</FontFamily>
                                                   <FontWeight>=IIF(Fields!PR_HEADER_DESC.Value = "Présent" And Fields!PR_VALUE.Value = "true", "Bold", "Normal")</FontWeight>
@@ -3715,6 +3764,7 @@ True, True
                                                 <Value>=Switch(Fields!PR_HEADER_SEQ.Value
 =5 and Fields!PR_VALUE.Value = "true" , Fields!TITLE.Value ,
 True, "")</Value>
+                                                <MarkupType>HTML</MarkupType>
                                                 <Style>
                                                   <FontFamily>Arial</FontFamily>
                                                   <FontWeight>=IIF(Fields!PR_HEADER_DESC.Value="RCC" and Fields!PR_VALUE.Value = "true" , "Bold", "Normal")</FontWeight>
@@ -3801,40 +3851,94 @@ True, True
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>3.59362cm</Width>
+                                <Width>35.9362mm</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>1.18208cm</Height>
+                                <Height>11.8208mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
-                                      <Textbox Name="Textbox43">
-                                        <CanGrow>true</CanGrow>
-                                        <KeepTogether>true</KeepTogether>
-                                        <Paragraphs>
-                                          <Paragraph>
-                                            <TextRuns>
-                                              <TextRun>
-                                                <Value />
-                                                <Style />
-                                              </TextRun>
-                                            </TextRuns>
-                                            <Style />
-                                          </Paragraph>
-                                        </Paragraphs>
-                                        <rd:DefaultName>Textbox43</rd:DefaultName>
+                                      <Tablix Name="Tablix30">
+                                        <TablixBody>
+                                          <TablixColumns>
+                                            <TablixColumn>
+                                              <Width>35.9362mm</Width>
+                                            </TablixColumn>
+                                          </TablixColumns>
+                                          <TablixRows>
+                                            <TablixRow>
+                                              <Height>11.8208mm</Height>
+                                              <TablixCells>
+                                                <TablixCell>
+                                                  <CellContents>
+                                                    <Textbox Name="AU_VALUE1">
+                                                      <CanGrow>true</CanGrow>
+                                                      <KeepTogether>true</KeepTogether>
+                                                      <Paragraphs>
+                                                        <Paragraph>
+                                                          <TextRuns>
+                                                            <TextRun>
+                                                              <Value>=Fields!AU_VALUE.Value</Value>
+                                                              <Style>
+                                                                <FontFamily>Arial</FontFamily>
+                                                              </Style>
+                                                            </TextRun>
+                                                          </TextRuns>
+                                                          <Style>
+                                                            <TextAlign>Center</TextAlign>
+                                                          </Style>
+                                                        </Paragraph>
+                                                      </Paragraphs>
+                                                      <rd:DefaultName>AU_VALUE1</rd:DefaultName>
+                                                      <Style>
+                                                        <Border>
+                                                          <Style>None</Style>
+                                                        </Border>
+                                                        <VerticalAlign>Top</VerticalAlign>
+                                                        <PaddingLeft>2pt</PaddingLeft>
+                                                        <PaddingRight>2pt</PaddingRight>
+                                                        <PaddingTop>2pt</PaddingTop>
+                                                        <PaddingBottom>2pt</PaddingBottom>
+                                                      </Style>
+                                                    </Textbox>
+                                                  </CellContents>
+                                                </TablixCell>
+                                              </TablixCells>
+                                            </TablixRow>
+                                          </TablixRows>
+                                        </TablixBody>
+                                        <TablixColumnHierarchy>
+                                          <TablixMembers>
+                                            <TablixMember />
+                                          </TablixMembers>
+                                        </TablixColumnHierarchy>
+                                        <TablixRowHierarchy>
+                                          <TablixMembers>
+                                            <TablixMember>
+                                              <Group Name="Details4">
+                                                <GroupExpressions>
+                                                  <GroupExpression>=Fields!AU_VALUE.Value</GroupExpression>
+                                                  <GroupExpression>=Fields!AU_SHORT_DESC.Value</GroupExpression>
+                                                  <GroupExpression>=Fields!CP_DESC.Value</GroupExpression>
+                                                </GroupExpressions>
+                                              </Group>
+                                              <Visibility>
+                                                <Hidden>=Switch(
+Fields!AU_SHORT_DESC.Value = "Source", False,
+True,True)</Hidden>
+                                              </Visibility>
+                                            </TablixMember>
+                                          </TablixMembers>
+                                        </TablixRowHierarchy>
+                                        <DataSetName>Auth_Country</DataSetName>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
                                           </Border>
-                                          <PaddingLeft>2pt</PaddingLeft>
-                                          <PaddingRight>2pt</PaddingRight>
-                                          <PaddingTop>2pt</PaddingTop>
-                                          <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
-                                      </Textbox>
+                                      </Tablix>
                                     </CellContents>
                                   </TablixCell>
                                 </TablixCells>
@@ -3851,6 +3955,7 @@ True, True
                               <TablixMember />
                             </TablixMembers>
                           </TablixRowHierarchy>
+                          <DataSetName>Auth_Country</DataSetName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -3870,25 +3975,27 @@ True, True
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>4.27271cm</Width>
+                                <Width>42.7271mm</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>1.18208cm</Height>
+                                <Height>11.8208mm</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
-                                      <Textbox Name="IIVALUE1">
+                                      <Textbox Name="AU_VALUE">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>=Fields!IIVALUE.Value</Value>
+                                                <Value>=Fields!AU_VALUE.Value</Value>
                                                 <MarkupType>HTML</MarkupType>
-                                                <Style />
+                                                <Style>
+                                                  <FontFamily>Arial</FontFamily>
+                                                </Style>
                                               </TextRun>
                                             </TextRuns>
                                             <Style>
@@ -3896,16 +4003,11 @@ True, True
                                             </Style>
                                           </Paragraph>
                                         </Paragraphs>
-                                        <rd:DefaultName>IIVALUE1</rd:DefaultName>
+                                        <rd:DefaultName>AU_VALUE</rd:DefaultName>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
                                           </Border>
-                                          <BottomBorder>
-                                            <Color>Black</Color>
-                                            <Style>Solid</Style>
-                                            <Width>1pt</Width>
-                                          </BottomBorder>
                                           <VerticalAlign>Top</VerticalAlign>
                                           <PaddingLeft>2pt</PaddingLeft>
                                           <PaddingRight>2pt</PaddingRight>
@@ -3929,13 +4031,16 @@ True, True
                               <TablixMember>
                                 <Group Name="Details3">
                                   <GroupExpressions>
-                                    <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                                    <GroupExpression>=Fields!CP_DESC.Value</GroupExpression>
+                                    <GroupExpression>=Fields!AU_SHORT_DESC.Value</GroupExpression>
+                                    <GroupExpression>=Fields!AU_VALUE.Value</GroupExpression>
                                   </GroupExpressions>
                                 </Group>
                                 <Visibility>
                                   <Hidden>=Switch(
-IsNothing(Fields!IIVALUE.Value), True,
-Fields!IC_SHORT_DESC.Value = "ComponentList" and Fields!II_SHORT_DESC.Value = "Country of" , False,
+
+Fields!AU_SHORT_DESC.Value = "COO",False,
+
 True,True)</Hidden>
                                 </Visibility>
                               </TablixMember>
@@ -3946,6 +4051,11 @@ True,True)</Hidden>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
                           </Style>
                         </Tablix>
                       </CellContents>
@@ -4275,7 +4385,7 @@ True, True
             </TablixRowHierarchy>
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
-            <Top>260.40988mm</Top>
+            <Top>260.67446mm</Top>
             <Left>0mm</Left>
             <Height>22.05417mm</Height>
             <Width>512.55866mm</Width>
@@ -4477,7 +4587,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>modap</DataSetName>
             <Top>161.31645mm</Top>
-            <Left>22.00493mm</Left>
+            <Left>22.32243mm</Left>
             <Height>8.99584mm</Height>
             <Width>199.11231mm</Width>
             <ZIndex>10</ZIndex>
@@ -4595,7 +4705,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Ligne_Production</DataSetName>
             <Top>140.27719mm</Top>
-            <Left>21.952mm</Left>
+            <Left>22.2695mm</Left>
             <Height>6.08542mm</Height>
             <Width>87.03952mm</Width>
             <ZIndex>11</ZIndex>
@@ -4771,7 +4881,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>GLOBAL_DATA</DataSetName>
             <Top>54.3983mm</Top>
-            <Left>21.52866mm</Left>
+            <Left>21.84616mm</Left>
             <Height>7.67292mm</Height>
             <Width>293.41467mm</Width>
             <ZIndex>12</ZIndex>
@@ -4885,7 +4995,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>86.54914mm</Top>
-            <Left>171.89547mm</Left>
+            <Left>172.21297mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.50401mm</Width>
             <ZIndex>13</ZIndex>
@@ -4997,7 +5107,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>97.02662mm</Top>
-            <Left>172.1071mm</Left>
+            <Left>172.4246mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.29238mm</Width>
             <ZIndex>14</ZIndex>
@@ -5109,7 +5219,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Form_ppsg</DataSetName>
             <Top>107.63643mm</Top>
-            <Left>171.89547mm</Left>
+            <Left>172.21297mm</Left>
             <Height>6.08542mm</Height>
             <Width>128.50401mm</Width>
             <ZIndex>15</ZIndex>
@@ -5220,7 +5330,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Dec_ppsg</DataSetName>
             <Top>66.87293mm</Top>
-            <Left>21.74034mm</Left>
+            <Left>22.05784mm</Left>
             <Height>6.08542mm</Height>
             <Width>293.20299mm</Width>
             <ZIndex>16</ZIndex>
@@ -5331,7 +5441,7 @@ False,True
             </TablixRowHierarchy>
             <DataSetName>Client_ppsg</DataSetName>
             <Top>34.5934mm</Top>
-            <Left>21.952mm</Left>
+            <Left>22.2695mm</Left>
             <Height>6.08542mm</Height>
             <Width>124.80084mm</Width>
             <ZIndex>17</ZIndex>
@@ -5409,7 +5519,7 @@ False,True
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>=Fields!DESCRIPTION.Value</Value>
+                                                <Value>=Fields!CODE_ERP.Value &amp; " " &amp; "(" &amp; Fields!DESCRIPTION.Value &amp; ")"</Value>
                                                 <Style>
                                                   <FontWeight>Bold</FontWeight>
                                                 </Style>
@@ -5515,7 +5625,7 @@ True, True)</Hidden>
                               </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <DataSetName>modap</DataSetName>
+                          <DataSetName>Auth_Country</DataSetName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5542,7 +5652,7 @@ True, True)</Hidden>
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
             <Top>178.53827mm</Top>
-            <Left>22.2695mm</Left>
+            <Left>22.587mm</Left>
             <Height>11.37709mm</Height>
             <Width>198.84774mm</Width>
             <ZIndex>18</ZIndex>
@@ -5611,82 +5721,10 @@ True, True)</Hidden>
             </TablixRowHierarchy>
             <DataSetName>modap</DataSetName>
             <Top>196.26536mm</Top>
-            <Left>22.2695mm</Left>
+            <Left>22.587mm</Left>
             <Height>8.99584mm</Height>
             <Width>55.77417mm</Width>
             <ZIndex>19</ZIndex>
-            <Visibility>
-              <Hidden>true</Hidden>
-            </Visibility>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Tablix>
-          <Tablix Name="Tablix29">
-            <TablixBody>
-              <TablixColumns>
-                <TablixColumn>
-                  <Width>55.77417mm</Width>
-                </TablixColumn>
-              </TablixColumns>
-              <TablixRows>
-                <TablixRow>
-                  <Height>8.99584mm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox42">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Contaminants / Microbiologie</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox8</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-              </TablixRows>
-            </TablixBody>
-            <TablixColumnHierarchy>
-              <TablixMembers>
-                <TablixMember />
-              </TablixMembers>
-            </TablixColumnHierarchy>
-            <TablixRowHierarchy>
-              <TablixMembers>
-                <TablixMember />
-              </TablixMembers>
-            </TablixRowHierarchy>
-            <DataSetName>modap</DataSetName>
-            <Top>213.99245mm</Top>
-            <Left>22.00493mm</Left>
-            <Height>8.99584mm</Height>
-            <Width>55.77417mm</Width>
-            <ZIndex>20</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
             </Visibility>
@@ -5709,14 +5747,14 @@ True, True)</Hidden>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="DESCRIPTION">
+                        <Textbox Name="REF_ERP">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <Value>=Fields!REF_ERP.Value</Value>
                                   <MarkupType>HTML</MarkupType>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
@@ -5726,7 +5764,7 @@ True, True)</Hidden>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                          <rd:DefaultName>REF_ERP</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -5748,7 +5786,7 @@ True, True)</Hidden>
                 <TablixMember>
                   <Group Name="halal">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                      <GroupExpression>=Fields!REF_ERP.Value</GroupExpression>
                       <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
                       <GroupExpression>=Fields!IDENTIFIER.Value</GroupExpression>
                     </GroupExpressions>
@@ -5810,10 +5848,10 @@ True,True
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
             <Top>23.33321cm</Top>
-            <Left>2.22695cm</Left>
+            <Left>2.2587cm</Left>
             <Height>0.6cm</Height>
             <Width>5.51921cm</Width>
-            <ZIndex>21</ZIndex>
+            <ZIndex>20</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -5840,7 +5878,7 @@ True,True
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <Value>=Fields!REF_ERP.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -5871,7 +5909,7 @@ True,True
                 <TablixMember>
                   <Group Name="Vegan">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                      <GroupExpression>=Fields!REF_ERP.Value</GroupExpression>
                       <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
                       <GroupExpression>=Fields!IDENTIFIER.Value</GroupExpression>
                     </GroupExpressions>
@@ -5932,10 +5970,10 @@ True, True)</Hidden>
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
             <Top>24.10254cm</Top>
-            <Left>2.1952cm</Left>
+            <Left>2.22695cm</Left>
             <Height>0.6cm</Height>
             <Width>5.58271cm</Width>
-            <ZIndex>22</ZIndex>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -5962,7 +6000,7 @@ True, True)</Hidden>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DESCRIPTION.Value</Value>
+                                  <Value>=Fields!REF_ERP.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -5991,7 +6029,13 @@ True, True)</Hidden>
             <TablixColumnHierarchy>
               <TablixMembers>
                 <TablixMember>
-                  <Group Name="Végétarien" />
+                  <Group Name="Végétarien">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!REF_ERP.Value</GroupExpression>
+                      <GroupExpression>=Fields!IIVALUE.Value</GroupExpression>
+                      <GroupExpression>=Fields!IDENTIFIER.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
                   <TablixMembers>
                     <TablixMember />
                   </TablixMembers>
@@ -6044,10 +6088,212 @@ True, True)</Hidden>
             </TablixRowHierarchy>
             <KeepTogether>true</KeepTogether>
             <DataSetName>Auth_Country</DataSetName>
-            <Top>24.84365cm</Top>
-            <Left>2.1952cm</Left>
+            <Top>24.87893cm</Top>
+            <Left>2.22695cm</Left>
             <Height>0.6cm</Height>
             <Width>5.55096cm</Width>
+            <ZIndex>22</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Tablix Name="Tablix29">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>56.51501mm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>155.62298mm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>8.99584mm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox42">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Contaminants  / Microbiologie</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Tablix Name="Tablix33">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>116.2001mm</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>8.99584mm</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox72">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!IC_SHORT_DESC.Value</Value>
+                                                <MarkupType>HTML</MarkupType>
+                                                <Style />
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox69</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="incorporation">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!incorporation.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <SortExpressions>
+                                  <SortExpression>
+                                    <Value>=Fields!incorporation.Value</Value>
+                                  </SortExpression>
+                                </SortExpressions>
+                                <TablixMembers>
+                                  <TablixMember />
+                                </TablixMembers>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="Description3">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!DESCRIPTION.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <SortExpressions>
+                                  <SortExpression>
+                                    <Value>=Fields!DESCRIPTION.Value</Value>
+                                  </SortExpression>
+                                </SortExpressions>
+                                <TablixHeader>
+                                  <Size>39.42288mm</Size>
+                                  <CellContents>
+                                    <Textbox Name="DESCRIPTION4">
+                                      <CanGrow>true</CanGrow>
+                                      <KeepTogether>true</KeepTogether>
+                                      <Paragraphs>
+                                        <Paragraph>
+                                          <TextRuns>
+                                            <TextRun>
+                                              <Value>=Fields!DESCRIPTION.Value</Value>
+                                              <Style>
+                                                <FontWeight>Bold</FontWeight>
+                                              </Style>
+                                            </TextRun>
+                                          </TextRuns>
+                                          <Style />
+                                        </Paragraph>
+                                      </Paragraphs>
+                                      <rd:DefaultName>DESCRIPTION</rd:DefaultName>
+                                      <Style>
+                                        <Border>
+                                          <Style>None</Style>
+                                        </Border>
+                                        <PaddingLeft>2pt</PaddingLeft>
+                                        <PaddingRight>2pt</PaddingRight>
+                                        <PaddingTop>2pt</PaddingTop>
+                                        <PaddingBottom>2pt</PaddingBottom>
+                                      </Style>
+                                    </Textbox>
+                                  </CellContents>
+                                </TablixHeader>
+                                <TablixMembers>
+                                  <TablixMember />
+                                </TablixMembers>
+                                <Visibility>
+                                  <Hidden>=Fields!QUANTITY.Value = 1000</Hidden>
+                                </Visibility>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>Auth_Country</DataSetName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Auth_Country</DataSetName>
+            <Top>212.66953mm</Top>
+            <Left>21.84616mm</Left>
+            <Height>8.99584mm</Height>
+            <Width>212.13799mm</Width>
             <ZIndex>23</ZIndex>
             <Style>
               <Border>
@@ -6056,14 +6302,14 @@ True, True)</Hidden>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>306.54113mm</Height>
+        <Height>289.87238mm</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>527.7074mm</Width>
+      <Width>528.0249mm</Width>
       <Page>
         <PageFooter>
           <Height>38.6821mm</Height>
@@ -6088,7 +6334,7 @@ True, True)</Hidden>
               </Paragraphs>
               <rd:DefaultName>Textbox47</rd:DefaultName>
               <Top>1.5628cm</Top>
-              <Left>19.18831cm</Left>
+              <Left>19.22006cm</Left>
               <Height>0.7426cm</Height>
               <Width>2.84312cm</Width>
               <Style>
